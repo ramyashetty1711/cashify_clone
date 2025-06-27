@@ -18,11 +18,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#7e2b8f] via-[#8d409c] to-[#bababa] flex justify-center items-center px-4">
-      <div className="w-full max-w-6xl bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#7e2b8f] via-[#8d409c] to-[#bababa] flex justify-center items-center px-4 py-2">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden">
         
         {/* Left Image Section */}
-        <div className="relative md:w-[50%] h-[300px] md:h-auto">
+        <div className="relative md:w-[60%] h-[300px] md:h-auto">
           <img
             src={LoginIllustration}
             alt="Login Illustration"
@@ -31,9 +31,9 @@ const Login = () => {
           <div className="absolute inset-0 bg-black/40 z-0" />
           <div className="relative z-10 p-6 md:p-10 text-white flex flex-col justify-center h-full">
             <div className="bg-white w-fit rounded-2xl ps-2 mb-6">
-              <img src={Logo} className="w-[8em] md:w-[10em]" alt="Logo" />
+              <img src={Logo} className="w-[7em] md:w-[8em]" alt="Logo" />
             </div>
-            <div className="bg-black/70 p-5 rounded-lg">
+            <div className="bg-black/70 p-5 rounded-lg mt-5">
               <h2 className="text-3xl md:text-4xl font-bold leading-snug">
               Welcome to{" "}
               <span className="bg-gradient-to-r from-[#dc31ff] via-[#cd65e1] to-[#bababa] bg-clip-text text-transparent">

@@ -34,13 +34,34 @@ const Navbar = () => {
       link: "/workorder",
     },
     {
+      display: "Service Management",
+      link: "/service-management",
+    },
+    {
+      display: "Spare Parts Management",
+      link: "/spare-parts-management",
+    },
+    {
+      display: "Device Management",
+      link: "/device-management",
+    },
+    {
+      display: "Artice Management",
+      link: "/artice-management",
+    },
+    {
+      display: "Basic Data",
+      link: "/basic-data",
+    },
+    {
       display: "Report Management",
+      link: "/report-management",
     },
   ];
 
   return (
     <>
-      <div className="h-fit py-3 w-full bg-white hover:shadow-lg hover:shadow-purple-200 transition-all duration-500 flex flex-row justify-between relative z-[100]">
+      <div className="h-fit py-3 w-full bg-white hover:shadow-lg hover:shadow-purple-200 transition-all duration-500 flex flex-row justify-between items-center relative z-[100]">
         <Link
           className="mx-4 self-center flex flex-row bg-[linear-gradient(102deg,#eb77ff,#f0e3f3)] rounded-lg"
           to={"/home"}
@@ -60,12 +81,12 @@ const Navbar = () => {
               >
                 <Link
                   to={menu.link}
-                  className={` !bg-white group w-full focus:!outline-none !border-none lg:w-fit h-fit lg:h-full text-md px-4 py-2 hover:!border-none focus-within:!border-none not-hover:!border-none group-hover:!text-purple-600 transition-all duration-300  rounded-lg  font-[600] flex flex-row items-center ${
+                  className={` !bg-white group w-full focus:!outline-none !border-none lg:w-fit h-fit lg:h-full text-md p-2 hover:!border-none focus-within:!border-none not-hover:!border-none group-hover:!text-purple-600 transition-all duration-300  rounded-lg  font-[600] flex flex-row items-center ${
                     menu.children ? " " : " cursor-pointer"
                   } ${
                     Location.pathname.includes(menu.link)
-                      ? " !text-purple-600 hover:!text-purple-700"
-                      : "!text-gray-600"
+                      ? " !text-purple-600 hover:!text-purple-700 text-xs"
+                      : "!text-gray-600 text-xs"
                   } `}
                 >
                   {menu.display}
@@ -109,7 +130,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <div className="min-w-[10%] content-center pe-5 justify-items-end flex flex-row justify-end items-center relative z-[100]">
+        <div className="min-w-[5%] content-center pe-5 justify-items-end flex flex-row justify-end items-center relative z-[100]">
           {/* <div className=" w-fit text-gray-500 font-semibold  px-2 py-2 rounded-[50%] h-fit border-2 border-blue-500 hover:text-white  hover:bg-[linear-gradient(152deg,#bbcad7,#2196F3_42%,#0464b7)] transition-all duration-300 hover:text-[1.075em] ease-in-out cursor-pointer">
             <IoNotifications size={25} />
           </div> */}

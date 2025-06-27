@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { TiUser } from "react-icons/ti";
-import { IoIosSettings } from "react-icons/io";
 import { IoLogOut } from "react-icons/io5";
 import { PiMoonFill } from "react-icons/pi";
 import { HiSun } from "react-icons/hi";
@@ -8,23 +7,21 @@ import { SpinnerCircular } from "spinners-react";
 import { useNavigate } from "react-router-dom";
 
 const ProfilePopover = () => {
-  const [ShowPopover, setShowPopover] = useState(false);
-  const [DarkMode, setDarkMode] = useState(false);
-  const [LogoutLoading, setLogoutLoading] = useState(false);
-  const Navigate = useNavigate();
-  const ProfileRef = useRef(null);
+  const [showPopover, setShowPopover] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const navigate = useNavigate();
+  const profileRef = useRef(null);
+
   useEffect(() => {
-    const clickhandler = (e) => {
-      if (ProfileRef.current && !ProfileRef.current.contains(e.target)) {
+    const clickHandler = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
         setShowPopover(false);
       }
     };
 
-    window.addEventListener("click", clickhandler);
-
-    return () => {
-      window.removeEventListener("click", clickhandler);
-    };
+    window.addEventListener("click", clickHandler);
+    return () => window.removeEventListener("click", clickHandler);
   }, []);
 
   useEffect(() => {
@@ -40,82 +37,67 @@ const ProfilePopover = () => {
   const toggleDarkMode = () => {
     const isDark = document.documentElement.classList.toggle("dark");
     localStorage.setItem("theme", isDark ? "dark" : "light");
+    setDarkMode(isDark);
   };
 
   return (
-    <div className="relative " ref={ProfileRef}>
+    <div className="relative" ref={profileRef}>
+      {/* Profile Icon */}
       <div
-        className={` w-fit text-gray-500 font-semibold h-fit ms-2 px-1 py-1 rounded-[50%] border-2 border-purple-500 hover:text-white  hover:bg-[linear-gradient(152deg,#9810fa,#c27aff,#6b00b7)] transition-all duration-300 hover:text-[1.075em] ease-in-out cursor-pointer ${
-          ShowPopover
-            ? "bg-[linear-gradient(152deg,#9810fa,#c27aff,#6b00b7)] text-white"
-            : ""
+        className={`w-fit text-gray-500 font-semibold h-fit ms-2 p-2 rounded-full border-2 border-purple-500 hover:text-white hover:bg-gradient-to-r from-purple-700 to-purple-400 transition-all duration-300 ease-in-out cursor-pointer ${
+          showPopover ? "bg-gradient-to-r from-purple-700 to-purple-400 text-white" : ""
         }`}
-        onClick={() => {
-          setShowPopover((prev) => !prev);
-        }}
+        onClick={() => setShowPopover((prev) => !prev)}
       >
-        <TiUser size={30} />
+        <TiUser size={26} />
       </div>
-      <div
-        className={`${
-          ShowPopover ? "block" : "hidden"
-        } min-h-[10vh] absolute z-[101] bg-white right-0 min-w-[15vw] rounded-xl top-[135%] transition-all duration-300 flex flex-col pt-2 px-4`}
-      >
-        <div className="text-[1.25em] text-gray-600 font-semibold text-start flex flex-row justify-between items-center">
-          Username
-          <div
-            className="bg-gray-200 h-fit min-w-[1em] p-2 rounded-3xl cursor-pointer group transition-all duration-500 hover:shadow-md hover:shadow-gray-400"
-            onClick={(e) => {
-              e.stopPropagation();
-              setDarkMode((prev) => !prev);
-              toggleDarkMode();
-            }}
-          >
-            {DarkMode ? (
-              <HiSun
-                className="transition-all duration-[800ms] ease-in-out opacity-100 group-hover:scale-110 "
-                size={22}
-              />
-            ) : (
-              <PiMoonFill
-                className="transition-all duration-[800ms] ease-in-out opacity-100 group-hover:scale-110"
-                size={22}
-              />
-            )}
-          </div>
-        </div>
 
-        <ul className="text-gray-500 text-start mt-4 ">
-          {/* <li className=" border-b-2 border-b-gray-100 text-[0.9em] flex flex-row pb-2 transition-all duration-300 mb-2 hover:scale-[1.05] cursor-pointer hover:ps-2">
-            <IoIosSettings size={20} className="me-2" /> Settings
-          </li> */}
-          <li
-            className={` border-b-2 border-b-gray-100 text-[0.9em] flex flex-row pb-2 text-red-600 transition-all duration-300 mb-2 hover:scale-[1.05]  hover:ps-2 ${
-              LogoutLoading ? "cursor-progress" : "cursor-pointer"
-            }`}
-            onClick={() => {
-              setLogoutLoading(true);
-              setTimeout(() => {
-                setLogoutLoading(false);
-                Navigate("/");
-              }, 3000);
-            }}
-          >
-            {LogoutLoading ? (
-              <SpinnerCircular
-                color="red"
-                size={20}
-                thickness={200}
-                className="me-2"
-                secondaryColor="#a4a4a4"
-              />
-            ) : (
-              <IoLogOut size={20} className="me-2 " />
-            )}{" "}
-            Logout
-          </li>
-        </ul>
-      </div>
+      {/* Popover Panel */}
+      {showPopover && (
+        <div className="absolute top-[135%] right-0 min-w-[220px] bg-white rounded-xl shadow-xl z-[101] p-4 transition-all duration-300">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-gray-700 font-semibold text-base">Username</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDarkMode();
+              }}
+              className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-all"
+            >
+              {darkMode ? <HiSun size={20} /> : <PiMoonFill size={20} />}
+            </button>
+          </div>
+
+          {/* Divider */}
+          <hr className="my-2" />
+
+          {/* Options */}
+          <ul className="text-sm text-gray-600">
+            {/* Logout */}
+            <li
+              className={`flex items-center gap-2 px-2 py-2 rounded-md transition-all ${
+                logoutLoading ? "cursor-progress" : "cursor-pointer hover:bg-red-100"
+              } text-red-600`}
+              onClick={() => {
+                if (logoutLoading) return;
+                setLogoutLoading(true);
+                setTimeout(() => {
+                  setLogoutLoading(false);
+                  navigate("/");
+                }, 3000);
+              }}
+            >
+              {logoutLoading ? (
+                <SpinnerCircular size={18} thickness={150} color="red" secondaryColor="#eee" />
+              ) : (
+                <IoLogOut size={18} />
+              )}
+              Logout
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

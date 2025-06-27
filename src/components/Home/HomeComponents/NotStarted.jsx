@@ -24,14 +24,14 @@ function NotStarted() {
       {todoList.map((item) => (
         <div
           key={item.id}
-          className="border border-gray-300 rounded-lg p-3 shadow-sm bg-white"
+          className="border border-gray-200 hover:shadow-lg rounded-lg p-3 shadow-sm bg-white"
         >
           <div className="flex justify-between items-center text-sm font-semibold text-gray-800">
             <span>ID: {item.id}</span>
             <div className="flex items-center gap-2">
               <Link
                 to={`/jobsheet/${item.jobSheet}`}
-                className="text-purple-600 hover:underline"
+                className="text-black hover:underline"
               >
                 {item.jobSheet}
               </Link>
