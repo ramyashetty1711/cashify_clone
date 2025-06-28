@@ -1,93 +1,56 @@
-import { ReactNode } from "react";
+import React, { useState } from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { RxCross2 } from "react-icons/rx"; // Close icon
 import Logo from "../../assets/Logo.png";
-import { IoNotifications } from "react-icons/io5";
-import { TbLiveView } from "react-icons/tb";
-import { LuHistory } from "react-icons/lu";
-import { IoIosGitNetwork } from "react-icons/io";
-import { BiNetworkChart } from "react-icons/bi";
-import { PiSpeedometerLight, PiUserCircleFill } from "react-icons/pi";
-import { LuWaypoints } from "react-icons/lu";
-import { BsDeviceSsd, BsCarFront } from "react-icons/bs";
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
-import {
-  MdOutlineCrisisAlert,
-  MdOutlineNotificationImportant,
-} from "react-icons/md";
-import ProfilePopover from "./ProfilePopover";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import ProfilePopover from "./ProfilePopover";
 import SideBarProfile from "./SideBarProfile";
 
 const Navbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const Location = useLocation();
+
   const MenuData = [
-    {
-      display: "Home",
-      link: "/home",
-    },
-    {
-      display: "SC Management",
-      link: "/sc-management",
-    },
-    {
-      display: "Work Order Management",
-      link: "/workorder",
-    },
-    {
-      display: "Service Management",
-      link: "/service-management",
-    },
-    {
-      display: "Spare Parts Management",
-      link: "/spare-parts-management",
-    },
-    {
-      display: "Device Management",
-      link: "/device-management",
-    },
-    {
-      display: "Artice Management",
-      link: "/artice-management",
-    },
-    {
-      display: "Basic Data",
-      link: "/basic-data",
-    },
-    {
-      display: "Report Management",
-      link: "/report-management",
-    },
+    { display: "Home", link: "/home" },
+    { display: "SC Management", link: "/sc-management" },
+    { display: "Work Order Management", link: "/workorder" },
+    { display: "Service Management", link: "/service-management" },
+    { display: "Spare Parts Management", link: "/spare-parts-management" },
+    { display: "Device Management", link: "/device-management" },
+    { display: "Artice Management", link: "/artice-management" },
+    { display: "Basic Data", link: "/basic-data" },
+    { display: "Report Management", link: "/report-management" },
+    { display: "Admin Tools", link: "/admin-tools" },
   ];
 
   return (
     <>
-      <div className="h-fit py-3 w-full bg-white hover:shadow-lg hover:shadow-purple-200 transition-all duration-500 flex flex-row justify-between items-center relative z-[100]">
+      {/* Top Bar */}
+      <div className="h-fit py-3 w-full bg-white hover:shadow-lg dark:bg-[#383838] hover:shadow-purple-200 transition-all duration-500 flex flex-row justify-between items-center relative z-[100]">
+        {/* Logo */}
         <Link
-          className="mx-4 self-center flex flex-row bg-[linear-gradient(102deg,#eb77ff,#f0e3f3)] rounded-lg"
+          className="mx-3 self-center flex flex-row bg-[linear-gradient(102deg,#eb77ff,#f0e3f3)] rounded-lg"
           to={"/home"}
         >
-          <img src={Logo} width={110} />
-          {/* <h4 className="text-gray-400 font-bold">
-            Elena <br />
-            Geo Tech
-          </h4> */}
+          <img src={Logo} width={90} alt="Logo" />
         </Link>
-        <div className=" w-full lg:w-fit lg:h-full py-8 lg:py-0 px-5 lg:px-0 flex flex-col lg:flex-row items-center lg:gap-10">
+
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex w-full lg:w-fit lg:h-full py-8 lg:py-0 px-5 lg:px-0 flex-col lg:flex-row items-center lg:gap-10">
           <ul className="flex">
             {MenuData.map((menu, index) => (
               <li
                 key={index}
-                className={`relative group w-full lg:w-fit h-fit lg:h-full `}
+                className={`relative group w-full lg:w-fit h-fit lg:h-full p-1`}
               >
                 <Link
                   to={menu.link}
-                  className={` !bg-white group w-full focus:!outline-none !border-none lg:w-fit h-fit lg:h-full text-md p-2 hover:!border-none focus-within:!border-none not-hover:!border-none group-hover:!text-purple-600 transition-all duration-300  rounded-lg  font-[600] flex flex-row items-center ${
-                    menu.children ? " " : " cursor-pointer"
-                  } ${
+                  className={`!bg-white group w-full focus:!outline-none !border-none lg:w-fit h-fit lg:h-full text-md px-1 py-2 hover:!border-none focus-within:!border-none not-hover:!border-none group-hover:!text-purple-600 dark:!bg-[#383838] transition-all duration-300 rounded-md font-[600] flex flex-row items-center ${
                     Location.pathname.includes(menu.link)
-                      ? " !text-purple-600 hover:!text-purple-700 text-xs"
-                      : "!text-gray-600 text-xs"
-                  } `}
+                      ? " !text-purple-600 dark:!text-purple-600 hover:!text-purple-700 text-xs"
+                      : "!text-gray-600 text-xs dark:!text-white"
+                  }`}
                 >
                   {menu.display}
                   {menu.children && (
@@ -97,53 +60,57 @@ const Navbar = () => {
                     />
                   )}
                 </Link>
-
-                {/* Dropdown menu */}
-                {menu.children && (
-                  <div
-                    className={`fixed left-[0px] lg:w-[100vw] border-b lg:border-y border-dashed lg:border-solid border-dark-white lg:bg-white lg:opacity-0 lg:pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-[400ms]  transition-all block py-2 px-2 pt-4 min-h-[30vh] `}
-                  >
-                    {menu.children && (
-                      <ul className="w-full grid grid-cols-2 gap-4 ">
-                        {menu?.children.map((child, idx) => (
-                          <li
-                            key={idx}
-                            className="p-4 hover:bg-gray-50 text-gray-500 cursor-pointer transition-all duration-300 rounded-lg min-h-[5em] content-center font-semibold navbar-list-hover"
-                          >
-                            <div className=" flex flex-row justify-center items-center transition-all duration-300 hover-items">
-                              <div className=" flex-[50%] place-items-end">
-                                {child.icon ? child.icon : ""}
-                              </div>
-                              <div className="flex-[50%] text-start">
-                                {child.display}
-                              </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
               </li>
             ))}
-          
           </ul>
         </div>
 
-        <div className="min-w-[5%] content-center pe-5 justify-items-end flex flex-row justify-end items-center relative z-[100]">
-          {/* <div className=" w-fit text-gray-500 font-semibold  px-2 py-2 rounded-[50%] h-fit border-2 border-blue-500 hover:text-white  hover:bg-[linear-gradient(152deg,#bbcad7,#2196F3_42%,#0464b7)] transition-all duration-300 hover:text-[1.075em] ease-in-out cursor-pointer">
-            <IoNotifications size={25} />
-          </div> */}
+        {/* Profile + Hamburger Section (for all screens) */}
+        <div className="flex items-center gap-4 pe-4 lg:pe-2">
+          {/* ProfilePopover always visible */}
+          <div>
+            <ProfilePopover />
+          </div>
 
-          <ProfilePopover />
+          {/* Mobile Hamburger Toggle */}
+          <button
+            className="lg:hidden text-2xl text-purple-700 dark:text-white"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <RxCross2 /> : <GiHamburgerMenu />}
+          </button>
         </div>
       </div>
-      <div className="min-h-[88vh] bg-gray-100 flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-5 ">
-        <div className="bg-gray-100 dark:bg-black lg:col-span-4 lg:row-span-5 col-span-4 min-h-[88vh]  p-2">
-  <Outlet />
-</div>
 
-        <div className="bg-gray-100 lg:row-span-5 lg:col-start-5 lg:block hidden p-2">
+      {/* Mobile Menu Content */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white dark:bg-[#383838] px-4 py-4 shadow-md z-40">
+          <ul className="flex flex-col gap-3">
+            {MenuData.map((menu, index) => (
+              <li key={index}>
+                <Link
+                  to={menu.link}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-3 py-2 rounded-md text-sm font-medium ${
+                    Location.pathname.includes(menu.link)
+                      ? "text-purple-700 dark:text-purple-300"
+                      : "text-gray-800 dark:text-white hover:bg-purple-100 dark:hover:bg-gray-700"
+                  }`}
+                >
+                  {menu.display}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Main Layout */}
+      <div className="min-h-[88vh] bg-gray-100 flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-5">
+        <div className="bg-gray-100 dark:bg-[#383838] lg:col-span-4 lg:row-span-5 col-span-4 min-h-[88vh] p-2">
+          <Outlet />
+        </div>
+        <div className="bg-gray-100 dark:bg-[#383838] lg:row-span-5 lg:col-start-5 lg:block hidden p-2">
           <SideBarProfile />
         </div>
       </div>

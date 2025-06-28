@@ -33,7 +33,7 @@ export default function DynamicDeviceForm({
 }) {
   return (
     <>
-      <div className="max-h-[75vh] overflow-x-auto custom-scrollbar">
+      <div className="max-h-[72vh] overflow-x-auto custom-scrollbar">
         <form
           onSubmit={handleSubmit}
           className="w-full  px-6 py-2 bg-white  dark:bg-black rounded space-y-6"

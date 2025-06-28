@@ -24,29 +24,29 @@ function NotStarted() {
       {todoList.map((item) => (
         <div
           key={item.id}
-          className="border border-gray-200 hover:shadow-lg rounded-lg p-3 shadow-sm bg-white"
+          className="border border-gray-200 dark:bg-gray-800 hover:shadow-lg rounded-lg p-3 shadow-sm bg-white"
         >
           <div className="flex justify-between items-center text-sm font-semibold text-gray-800">
-            <span>ID: {item.id}</span>
+            <span className='dark:text-white'>ID: {item.id}</span>
             <div className="flex items-center gap-2">
               <Link
                 to={`/jobsheet/${item.jobSheet}`}
-                className="text-black hover:underline"
+                className="hover:text-black hover:underline"
               >
                 {item.jobSheet}
               </Link>
               <button
                 onClick={() => handleCopy(item.jobSheet, item.id)}
-                className="text-gray-500 hover:text-purple-600"
+                className="text-gray-500 bg-white dark:text-white dark:bg-white  hover:text-purple-600"
               >
-                <MdContentCopy size={16} />
+                <MdContentCopy className=' ' size={16} />
               </button>
               {copiedId === item.id && (
                 <span className="text-green-500 text-xs">Copied!</span>
               )}
             </div>
           </div>
-          <div className="text-sm text-gray-600 mt-1">
+          <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Applicant: {item.applicant}
           </div>
         </div>

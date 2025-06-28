@@ -11,6 +11,7 @@ import DeviceManagement from "./components/DeviceManagement/DeviceManagement";
 import ArticleManagement from "./components/ArticleManagement/ArticleManagement";
 import BasicData from "./components/BasicData/BasicData";
 import ReportManagement from "./components/ReportManagement/ReportManagement";
+import AdminTools from "./components/AdminTools/AdminTools";
 
 export default function AppRoutes() {
   const AppRoutes = [
@@ -23,6 +24,7 @@ export default function AppRoutes() {
     { path: "/artice-management", component: <ArticleManagement /> },
     { path: "/basic-data", component: <BasicData /> },
     { path: "/report-management", component: <ReportManagement /> },
+    { path: "/admin-tools", component: <AdminTools /> },
   ];
   return (
     <Router>

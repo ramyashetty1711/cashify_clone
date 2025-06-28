@@ -30,7 +30,7 @@ export default function WorkOrderManagement() {
   ];
   return (
     <>
-      <div className="flex flex-col w-full h-full p-4">
+      <div className="flex flex-col w-full h-full p-4 bg-white dark:bg-black rounded-lg">
         <div
           className={`w-full content-end flex flex-row text-end  mb-2 ${
             ShowAdd ? "justify-between" : "justify-end"
@@ -67,7 +67,7 @@ export default function WorkOrderManagement() {
             handleSubmit={handleSubmit}
           />
         ) : (
-          <div className="overflow-x-auto  max-h-[75vh] custom-scrollbar">
+          <div className="overflow-x-auto  max-h-[72vh] custom-scrollbar">
             <table className="min-w-full table-auto border-collapse border border-gray-200 shadow-md rounded-lg overflow-hidden">
               <thead className="bg-purple-100 dark:bg-purple-800 text-purple-600 dark:text-gray-200 sticky top-0 z-10">
                 <tr>

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   ActiveFilter: "",
+  isRegisterModalOpen: false,
 };
 
 const DataSlice = createSlice({
@@ -11,9 +12,15 @@ const DataSlice = createSlice({
     ActiveFilterUpdate: (state, action) => {
       state.ActiveFilter = action.payload;
     },
+    openRegisterModal: (state) => {
+      state.isRegisterModalOpen = true;
+    },
+    closeRegisterModal: (state) => {
+      state.isRegisterModalOpen = false;
+    },
   },
 });
 
-export const { ActiveFilterUpdate } = DataSlice.actions;
+export const { ActiveFilterUpdate,openRegisterModal, closeRegisterModal } = DataSlice.actions;
 
 export default DataSlice.reducer;

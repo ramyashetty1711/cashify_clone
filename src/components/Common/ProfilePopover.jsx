@@ -31,6 +31,7 @@ const ProfilePopover = () => {
       setDarkMode(true);
     } else {
       document.documentElement.classList.remove("dark");
+      setDarkMode(false);
     }
   }, []);
 
@@ -49,15 +50,15 @@ const ProfilePopover = () => {
         }`}
         onClick={() => setShowPopover((prev) => !prev)}
       >
-        <TiUser size={26} />
+        <TiUser size={26} className="dark:text-black" />
       </div>
 
       {/* Popover Panel */}
       {showPopover && (
-        <div className="absolute top-[135%] right-0 min-w-[220px] bg-white rounded-xl shadow-xl z-[101] p-4 transition-all duration-300">
+        <div className="absolute top-[135%] dark:bg-[#383838] right-0 min-w-[220px] bg-white rounded-xl shadow-xl z-[101] p-4 transition-all duration-300">
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
-            <span className="text-gray-700 font-semibold text-base">Username</span>
+            <span className="text-gray-700 dark:text-white font-semibold text-base">Username</span>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -65,35 +66,47 @@ const ProfilePopover = () => {
               }}
               className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-all"
             >
-              {darkMode ? <HiSun size={20} /> : <PiMoonFill size={20} />}
+              {darkMode ? (
+                <HiSun size={20} className="text-white bg-black" />
+              ) : (
+                <PiMoonFill size={20} className="text-gray-900 border-gray-900" />
+              )}
             </button>
           </div>
 
           {/* Divider */}
-          <hr className="my-2" />
+          <hr className="my-2 text-gray-900 dark:text-gray-400" />
 
           {/* Options */}
           <ul className="text-sm text-gray-600">
             {/* Logout */}
             <li
-              className={`flex items-center gap-2 px-2 py-2 rounded-md transition-all ${
+              className={`flex items-center justify-center gap-2 px-2 py-2 rounded-md transition-all ${
                 logoutLoading ? "cursor-progress" : "cursor-pointer hover:bg-red-100"
               } text-red-600`}
               onClick={() => {
                 if (logoutLoading) return;
                 setLogoutLoading(true);
+
+                // Wait for logout, then reset theme
                 setTimeout(() => {
+                  // Reset to light mode AFTER logout is finished
+                  localStorage.setItem("theme", "light");
+                  document.documentElement.classList.remove("dark");
+                  setDarkMode(false);
+
                   setLogoutLoading(false);
                   navigate("/");
                 }, 3000);
               }}
             >
               {logoutLoading ? (
-                <SpinnerCircular size={18} thickness={150} color="red" secondaryColor="#eee" />
+                <SpinnerCircular size={18} thickness={250} color="red" secondaryColor="#eee" />
               ) : (
-                <IoLogOut size={18} />
+                <>
+                  <IoLogOut size={18} /> Logout
+                </>
               )}
-              Logout
             </li>
           </ul>
         </div>

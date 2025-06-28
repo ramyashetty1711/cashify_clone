@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Switch Kart - MG Road",
+    "address": "123 MG Road, Bengaluru, Karnataka - 560001",
+    "isActive": true
+  },
+  {
+    "id": 2,
+    "name": "Switch Kart - T Nagar",
+    "address": "45 North Usman Road, Chennai, Tamil Nadu - 600017",
+    "isActive": true
+  },
+  {
+    "id": 3,
+    "name": "Switch Kart - HiTech City",
+    "address": "Plot 23, Madhapur, Hyderabad, Telangana - 500081",
+    "isActive": false
+  },
+  {
+    "id": 4,
+    "name": "Switch Kart - Andheri West",
+    "address": "401, Lokhandwala Complex, Mumbai, Maharashtra - 400053",
+    "isActive": true
+  },
+  {
+    "id": 5,
+    "name": "Switch Kart - Salt Lake",
+    "address": "B-25, Sector 1, Salt Lake, Kolkata, West Bengal - 700064",
+    "isActive": false
+  },
+  {
+    "id": 6,
+    "name": "Switch Kart - Vyttila",
+    "address": "Opp. Metro Station, Vyttila, Kochi, Kerala - 682019",
+    "isActive": true
+  },
+  {
+    "id": 7,
+    "name": "Switch Kart - Gariahat",
+    "address": "6B, Gariahat Road, Kolkata, West Bengal - 700019",
+    "isActive": true
+  },
+  {
+    "id": 8,
+    "name": "Switch Kart - Koramangala",
+    "address": "7th Block, Koramangala, Bengaluru, Karnataka - 560095",
+    "isActive": false
+  },
+  {
+    "id": 9,
+    "name": "Switch Kart - Ameerpet",
+    "address": "Near Metro Station, Ameerpet, Hyderabad, Telangana - 500016",
+    "isActive": true
+  },
+  {
+    "id": 10,
+    "name": "Switch Kart - Alwarpet",
+    "address": "Cathedral Road, Alwarpet, Chennai, Tamil Nadu - 600018",
+    "isActive": false
+  }
+]
