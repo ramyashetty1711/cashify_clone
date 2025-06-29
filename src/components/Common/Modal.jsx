@@ -36,7 +36,7 @@ const Modal = ({
       onClick={onHide}
     >
       <div
-        className={`bg-white w-full ${WIDTH_MAP[size]} mx-4 rounded-lg shadow-lg`}
+        className={`bg-white dark:bg-black  w-full ${WIDTH_MAP[size]} mx-4 rounded-lg shadow-lg`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

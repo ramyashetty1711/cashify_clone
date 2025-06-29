@@ -42,7 +42,7 @@ export default function Home() {
   };
 
   return (
-    <div className="p-4 rounded-lg bg-white dark:bg-black">
+    <div className="flex flex-col justify-start min-h-full bg-white dark:bg-black rounded-lg pt-8 px-2">
       {/* Tab Buttons Section */}
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 sm:flex-wrap">
         {StatusDisplay.map((val) => {

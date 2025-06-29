@@ -56,7 +56,7 @@ export default function StoreManagement() {
   };
 
   return (
-    <div className="p-4 rounded-lg bg-white dark:bg-black">
+    <div className="p-4 min-h-[100vh] rounded-lg bg-white dark:bg-black">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
           Store Management
@@ -90,7 +90,7 @@ export default function StoreManagement() {
       )}
 
       {!showAddForm && (
-        <div className="overflow-x-auto max-h-[69vh] custom-scrollbar mt-2">
+        <div className="overflow-x-auto max-h-[80vh] custom-scrollbar mt-2">
           <table className="min-w-full table-auto border-collapse border border-gray-200 shadow-md rounded-lg overflow-hidden">
             <thead className="bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-gray-100 sticky top-0 z-10">
               <tr>
@@ -190,7 +190,7 @@ export default function StoreManagement() {
         size="md"
       >
         {selectedStore && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 dark:bg-black">
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Store Name

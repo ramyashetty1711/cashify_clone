@@ -15,9 +15,9 @@ const Navbar = () => {
     { display: "Home", link: "/home" },
     { display: "SC Management", link: "/sc-management" },
     { display: "Work Order Management", link: "/workorder" },
-    { display: "Service Management", link: "/service-management" },
-    { display: "Spare Parts Management", link: "/spare-parts-management" },
-    { display: "Device Management", link: "/device-management" },
+    // { display: "Service Management", link: "/service-management" },
+    // { display: "Spare Parts Management", link: "/spare-parts-management" },
+    // { display: "Device Management", link: "/device-management" },
     { display: "Artice Management", link: "/artice-management" },
     { display: "Basic Data", link: "/basic-data" },
     { display: "Report Management", link: "/report-management" },
@@ -44,14 +44,15 @@ const Navbar = () => {
                 key={index}
                 className={`relative group w-full lg:w-fit h-fit lg:h-full p-1`}
               >
-                <Link
-                  to={menu.link}
-                  className={`!bg-white group w-full focus:!outline-none !border-none lg:w-fit h-fit lg:h-full text-md px-1 py-2 hover:!border-none focus-within:!border-none not-hover:!border-none group-hover:!text-purple-600 dark:!bg-[#383838] transition-all duration-300 rounded-md font-[600] flex flex-row items-center ${
-                    Location.pathname.includes(menu.link)
-                      ? " !text-purple-600 dark:!text-purple-600 hover:!text-purple-700 text-xs"
-                      : "!text-gray-600 text-xs dark:!text-white"
-                  }`}
-                >
+               <Link
+  to={menu.link}
+  className={`group w-full lg:w-fit h-fit px-3 py-2 rounded-md transition-all duration-300 font-semibold flex items-center gap-2
+    ${Location.pathname.includes(menu.link)
+      ? 'text-purple-600 underline hover:text-purple-700 dark:text-purple-400 font-bold underline' 
+      : 'text-gray-400 hover:text-purple-600 dark:text-white'}
+    bg-white dark:bg-[#383838]
+    focus:outline-none border-none`}
+>
                   {menu.display}
                   {menu.children && (
                     <TiArrowSortedDown
@@ -106,8 +107,8 @@ const Navbar = () => {
       )}
 
       {/* Main Layout */}
-      <div className="min-h-[88vh] bg-gray-100 flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-5">
-        <div className="bg-gray-100 dark:bg-[#383838] lg:col-span-4 lg:row-span-5 col-span-4 min-h-[88vh] p-2">
+      <div className="min-h-[100vh] bg-gray-100 flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-5">
+        <div className="bg-gray-100 dark:bg-[#383838] lg:col-span-4 lg:row-span-5 col-span-4 min-h-[100vh] p-2">
           <Outlet />
         </div>
         <div className="bg-gray-100 dark:bg-[#383838] lg:row-span-5 lg:col-start-5 lg:block hidden p-2">

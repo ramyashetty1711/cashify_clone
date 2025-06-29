@@ -8,7 +8,7 @@ export default function StoreFormTabs() {
   return (
     <div className="grid lg:grid-cols-[12rem_1fr] grid-rows-[auto_1fr] lg:grid-rows-1 border rounded-lg overflow-hidden dark:bg-gray-800">
       {/* Tabs (top on mobile, left on desktop) */}
-      <div className="flex lg:flex-col gap-1 dark:bg-gray-900 border-b lg:border-b-0 lg:border-r dark:border-gray-700">
+      <div className="flex lg:flex-col gap-1 dark:bg-gray-900 bg-purple-100 p-5 border-b lg:border-b-0 lg:border-r dark:border-gray-700">
         <button
           className={`w-full p-3 text-sm font-medium text-left transition-all ${
             activeTab === "addStore"
@@ -32,7 +32,7 @@ export default function StoreFormTabs() {
       </div>
 
       {/* Content */}
-      <div className="p-5 text-gray-800 dark:text-white">
+      <div className=" text-gray-800 dark:text-white">
         {activeTab === "addStore" && <StoreAdditionForm />}
         {activeTab === "createCredentials" && <StoreCredentialForm />}
       </div>
