@@ -5,6 +5,8 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  --primary: #4900a8;
+  --secondary: #7c57fc;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -59,3 +61,20 @@ button:focus-visible {
  
  
 }
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(10deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.animate-floating {
+  animation: floating 6s ease-in-out infinite;
+}
+

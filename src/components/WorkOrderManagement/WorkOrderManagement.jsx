@@ -1,32 +1,32 @@
 import React, { useState } from "react";
 import WOData from "./WorkOrderData.json";
-import { IoIosCloseCircle, IoMdAddCircle } from "react-icons/io";
-import { FaEye, FaEdit } from "react-icons/fa";
+import { FaEye, FaEdit, FaPlus } from "react-icons/fa";
+import Modal from "../Common/Modal";
+import { CiFilter } from "react-icons/ci";
 import DynamicDeviceForm from "./WorksheetForm";
-import WorkOrderRepairProcess from "./WorkOrderRepairProcess";
-import RepairedForm from "./RepairedForm";
-import Modal from "../Common/Modal"; // Modal component
+import Select from "react-select";
+import JobFormWrap from "./JobFormWrap";
+
 
 export default function WorkOrderManagement() {
   const [storeData, setStoreData] = useState(WOData);
-  const [ShowAdd, setShowAdd] = useState(false);
-  const [ShowRepair, setShowRepair] = useState(false);
-  const [ShowRepaired, setShowRepaired] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [filteredData, setFilteredData] = useState(WOData);
+  const [editingField, setEditingField] = useState(null);
+const [editValue, setEditValue] = useState("");
+  const [filters, setFilters] = useState({
+    job_sheet_no: "",
+    phone_number: "",
+    imei_number: "",
+    submission_category: "",
+    repair_category: "",
+    status: "",
+  });
+
   const [selectedWorkOrder, setSelectedWorkOrder] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted form data:", formData);
-    setFormData({});
-  };
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [showTable, setShowTable] = useState(true); // Toggle between table and form
 
   const handleEdit = (order) => {
     setSelectedWorkOrder({ ...order });
@@ -34,11 +34,6 @@ export default function WorkOrderManagement() {
   };
 
   const handleEditSave = () => {
-    if (!selectedWorkOrder.job_sheet_no || !selectedWorkOrder.imei) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
     setStoreData((prev) =>
       prev.map((order) =>
         order.id === selectedWorkOrder.id ? selectedWorkOrder : order
@@ -47,225 +42,352 @@ export default function WorkOrderManagement() {
     setIsEditModalOpen(false);
   };
 
+  const formatDateTime = (datetime) => {
+    return datetime
+      ? new Date(datetime).toLocaleString("en-IN", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        })
+      : "N/A";
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
+
+  const handleSearch = () => {
+    const filtered = storeData.filter((item) => {
+      return (
+        (!filters.job_sheet_no || item.job_sheet_no?.toLowerCase().includes(filters.job_sheet_no.toLowerCase())) &&
+        (!filters.phone_number || item.phone_number?.toLowerCase().includes(filters.phone_number.toLowerCase())) &&
+        (!filters.imei_number || item.imei_number?.toLowerCase().includes(filters.imei_number.toLowerCase())) &&
+        (!filters.submission_category || item.submission_category === filters.submission_category) &&
+        (!filters.repair_category || item.repair_category === filters.repair_category) &&
+        (!filters.status || item.status === filters.status)
+      );
+    });
+    setFilteredData(filtered);
+  };
+
+  const handleReset = () => {
+    setFilters({
+      job_sheet_no: "",
+      phone_number: "",
+      imei_number: "",
+      submission_category: "",
+      repair_category: "",
+      status: "",
+    });
+    setFilteredData(storeData);
+  };
+
   return (
-    <div className="flex flex-col w-full h-full p-4 bg-white dark:bg-black rounded-lg">
-      <div className="w-full flex flex-row items-center mb-4">
-        {(ShowAdd || ShowRepair || ShowRepaired) && (
-          <div className="text-2xl font-semibold text-gray-600 dark:text-white">
-            {ShowAdd
-              ? "Add Worksheet"
-              : ShowRepair
-              ? "Repair Process"
-              : "Repaired Form"}
-          </div>
-        )}
-        <div className="flex gap-2 ml-auto">
-          <ButtonToggle
-            label="Repair Process"
-            isActive={ShowRepair}
-            onClick={() => {
-              setShowRepair((prev) => !prev);
-              setShowAdd(false);
-              setShowRepaired(false);
-            }}
-          />
-          <ButtonToggle
-            label="Add"
-            icon={<IoMdAddCircle size={20} />}
-            isActive={ShowAdd}
-            onClick={() => {
-              setShowAdd((prev) => !prev);
-              setShowRepair(false);
-              setShowRepaired(false);
-            }}
-          />
-          <ButtonToggle
-            label="Repaired"
-            isActive={ShowRepaired}
-            onClick={() => {
-              setShowRepaired((prev) => !prev);
-              setShowAdd(false);
-              setShowRepair(false);
-            }}
-          />
+    <div className="w-full h-full p-4 bg-white dark:bg-black rounded-lg">
+      <div className="flex justify-between flex-wrap gap-2 items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Work Orders</h2>
+        <div className="flex gap-2">
+          {showTable && (
+            <button
+              onClick={() => setIsFilterModalOpen(true)}
+              className="bg-[var(--secondary)] text-white px-4 py-2 rounded hover:bg-[var(--primary)]"
+              title="Filter"
+            >
+              <CiFilter className="text-[20px] " />
+            </button>
+          )}
+          <button
+            onClick={() => setShowTable((prev) => !prev)}
+            className={`flex items-center gap-2 px-4 py-2 rounded shadow text-white ${
+              showTable ? "bg-[var(--secondary)] hover:bg-[var(--primary)]" : "bg-red-600 hover:bg-red-700"
+            }`}
+          >
+            {showTable ? <><FaPlus /> Add</> : "Close"}
+          </button>
         </div>
       </div>
 
-      {ShowAdd ? (
-        <DynamicDeviceForm
-          formData={formData}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-        />
-      ) : ShowRepair ? (
-        <WorkOrderRepairProcess />
-      ) : ShowRepaired ? (
-        <RepairedForm />
+      {showTable ? (
+        <div className="overflow-x-auto max-h-[68vh] custom-scrollbar">
+          <table className="min-w-full table-auto border-collapse border border-gray-200 shadow-md rounded-lg text-sm md:text-base">
+  <thead className="bg-purple-100 dark:bg-[var(--primary)] text-[var(--primary)] dark:text-gray-200 sticky top-0 z-10">
+    <tr>
+      <th className="px-6 py-3 text-left">S.No</th>
+      <th className="px-6 py-3 text-left">Job Sheet Number</th>
+      <th className="px-6 py-3 text-left">Status</th>
+      <th className="px-6 py-3 text-left">Phone Number</th>
+      <th className="px-6 py-3 text-left">Receiving Time</th>
+      <th className="px-6 py-3 text-left">Actions</th>
+    </tr>
+  </thead>
+  <tbody className="divide-y divide-gray-200 bg-white dark:bg-gray-900 dark:text-gray-300 text-gray-700">
+    {filteredData.map((val, index) => (
+      <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+        <td className="px-6 py-3 text-left">{index + 1}</td>
+        <td className="px-6 py-3 text-left">{val.job_sheet_no || "N/A"}</td>
+        <td className="px-6 py-3 text-left">{val.status || "N/A"}</td>
+        <td className="px-6 py-3 text-left">{val.phone_number || "N/A"}</td>
+        <td className="px-6 py-3 text-left">{formatDateTime(val.receiving_time)}</td>
+        <td className="px-6 py-3 flex gap-2">
+          <button
+            className="p-2 rounded-full bg-purple-100 text-[var(--primary)] dark:bg-[var(--primary)] dark:text-white border border-purple-400 hover:bg-[var(--secondary)] hover:text-white"
+            onClick={() => {
+              setSelectedWorkOrder(val);
+              setIsViewModalOpen(true);
+            }}
+          >
+            <FaEye />
+          </button>
+         
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+        </div>
       ) : (
-        <div className="overflow-x-auto max-h-[72vh] custom-scrollbar">
-          <table className="min-w-full table-auto border-collapse border border-gray-200 shadow-md rounded-lg overflow-hidden">
-            <thead className="bg-purple-100 dark:bg-purple-800 text-purple-600 dark:text-gray-200 sticky top-0 z-10">
-              <tr>
-                <th className="px-4 py-2 text-left font-medium">S.No</th>
-                <th className="px-4 py-2 text-left font-medium">Job Sheet No</th>
-                <th className="px-4 py-2 text-left font-medium">IMEI</th>
-                <th className="px-4 py-2 text-left font-medium">Invoice No</th>
-                <th className="px-4 py-2 text-left font-medium">Customer Name</th>
-                <th className="px-4 py-2 text-left font-medium">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white dark:bg-gray-900 dark:text-gray-300 text-gray-700">
-              {storeData.map((val, index) => (
-                <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{val.job_sheet_no || "N/A"}</td>
-                  <td className="px-4 py-2">{val.imei || "N/A"}</td>
-                  <td className="px-4 py-2">{val.invoice_no || "N/A"}</td>
-                  <td className="px-4 py-2">{val.customer_name || "N/A"}</td>
-                  <td className="px-4 py-2 flex gap-2">
-                    <button
-                      className="p-2 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-white border border-purple-400 hover:bg-purple-600 hover:text-white transition-all"
-                      onClick={() => {
-                        setSelectedWorkOrder(val);
-                        setIsViewModalOpen(true);
-                      }}
-                    >
-                      <FaEye />
-                    </button>
-                    <button
-                      className="p-2 rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-white border border-yellow-400 hover:bg-yellow-600 hover:text-white transition-all"
-                      onClick={() => handleEdit(val)}
-                    >
-                      <FaEdit />
-                    </button>
+        <div className="h-[67vh] rounded-lg">
+         <JobFormWrap/>
+        </div>
+      )}
+
+      {/* View Modal */}
+    
+
+<Modal
+  isOpen={isViewModalOpen}
+  onClose={() => {
+    setIsViewModalOpen(false);
+    setEditingField(null);
+  }}
+  title={<h2 className="text-lg font-semibold text-[var(--primary)]">Work Order Details</h2>}
+  size="xl"
+>
+  {selectedWorkOrder && (
+    <div className="space-y-6 max-h-[70vh] overflow-y-auto px-1">
+      {[
+        {
+          title: "Job Info",
+          rows: [
+            ["Job Sheet Number", selectedWorkOrder.job_sheet_no, "job_sheet_no", "text"],
+            ["Category of Job Sheet", selectedWorkOrder.category_of_jobsheet, "category_of_jobsheet", "text"],
+            ["Submission Category", selectedWorkOrder.submission_category, "submission_category", "select", ["Walk-In", "Pickup", "Courier"]],
+            ["Repair Category", selectedWorkOrder.repair_category, "repair_category", "select", ["Software", "Hardware", "Replacement"]],
+            ["Status", selectedWorkOrder.status, "status", "select", ["Received", "In Progress", "Completed", "Delivered", "Closed"]],
+            ["RVS Status", selectedWorkOrder.rvs_status, "rvs_status", "text"],
+          ],
+        },
+        {
+          title: "Customer Info",
+          rows: [
+            ["Phone Number", selectedWorkOrder.phone_number, "phone_number", "text"],
+            ["IMEI Number", selectedWorkOrder.imei_number, "imei_number", "text"],
+          ],
+        },
+        {
+          title: "Additional Info",
+          rows: [
+            ["Receiving Time", formatDateTime(selectedWorkOrder.receiving_time), "receiving_time", "text"],
+            ["Invoice Number", selectedWorkOrder.invoice_no, "invoice_no", "text"],
+            ["Handle Method", selectedWorkOrder.handle_method, "handle_method", "text"],
+            ["Source of Creation", selectedWorkOrder.source_of_creation, "source_of_creation", "text"],
+          ],
+        },
+      ].map((section, idx) => (
+        <div
+          key={idx}
+          className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-md"
+        >
+          <div className="bg-purple-100 dark:bg-[var(--primary)] px-4 py-2 rounded-t-lg flex justify-between items-center">
+            <h3 className="text-md font-semibold text-[var(--primary)] dark:text-white">{section.title}</h3>
+          </div>
+          <table className="w-full text-sm">
+            <tbody>
+              {section.rows.map(([label, value, field, type, options = []], i) => (
+                <tr
+                  key={i}
+                  className={
+                    i % 2 === 0
+                      ? "bg-gray-50 dark:bg-gray-800"
+                      : "bg-white dark:bg-gray-900"
+                  }
+                >
+                  <td className="py-2 px-4 font-medium text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700 w-1/3">
+                    {label}
+                  </td>
+                  <td className="py-2 px-4 text-gray-800 dark:text-gray-100 border-t border-gray-200 dark:border-gray-700">
+                    {editingField === field ? (
+                      type === "select" ? (
+                        <Select
+                          className="text-black"
+                          defaultValue={{ label: selectedWorkOrder[field], value: selectedWorkOrder[field] }}
+                          options={options.map((opt) => ({
+                            label: opt,
+                            value: opt,
+                          }))}
+                          onChange={(selected) => setEditValue(selected.value)}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          className="w-full px-2 py-1 border border-gray-300 rounded text-black"
+                        />
+                      )
+                    ) : (
+                      value || "Not Available"
+                    )}
+                  </td>
+                  <td className="py-2 px-4 text-right border-t border-gray-200 dark:border-gray-700 w-10">
+                    {editingField === field ? (
+                      <button
+                        onClick={() => {
+                          const updated = { ...selectedWorkOrder, [field]: editValue };
+                          setSelectedWorkOrder(updated);
+                          setEditingField(null);
+                        }}
+                        className="text-green-600 hover:text-green-800 font-semibold text-sm"
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        title={`Edit ${label}`}
+                        onClick={() => {
+                          setEditingField(field);
+                          setEditValue(
+                            typeof value === "string" ? value : ""
+                          );
+                        }}
+                        className="text-yellow-600 hover:text-yellow-800"
+                      >
+                        <FaEdit size={14} />
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      )}
+      ))}
+    </div>
+  )}
+</Modal>
 
-      {/* View Modal */}
+
+     
       <Modal
-        isOpen={isViewModalOpen}
-        onClose={() => setIsViewModalOpen(false)}
-        title={<h2 className="text-lg font-semibold text-purple-700">Work Order Details</h2>}
-        size="md"
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        size="4xl"
+        title={<h2 className="text-lg font-semibold text-[var(--primary)]">Filter Work Orders</h2>}
       >
-        {selectedWorkOrder ? (
-          <div className="text-gray-700 dark:text-gray-200 space-y-2">
-            <DetailRow label="Job Sheet No" value={selectedWorkOrder.job_sheet_no} />
-            <DetailRow label="IMEI" value={selectedWorkOrder.imei} />
-            <DetailRow label="Invoice No" value={selectedWorkOrder.invoice_no} />
-            <DetailRow label="Customer Name" value={selectedWorkOrder.customer_name} />
-          </div>
-        ) : (
-          <p>No details available.</p>
-        )}
-      </Modal>
-
-      {/* Edit Modal */}
-      <Modal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        title={<h2 className="text-lg font-semibold text-yellow-700">Edit Work Order</h2>}
-        size="md"
-      >
-        {selectedWorkOrder && (
-          <div className="flex flex-col gap-4 dark:bg-black">
-            <InputField
-              label="Job Sheet No"
-              value={selectedWorkOrder.job_sheet_no}
-              onChange={(e) =>
-                setSelectedWorkOrder({ ...selectedWorkOrder, job_sheet_no: e.target.value })
-              }
-            />
-            <InputField
-              label="IMEI"
-              value={selectedWorkOrder.imei}
-              onChange={(e) =>
-                setSelectedWorkOrder({ ...selectedWorkOrder, imei: e.target.value })
-              }
-            />
-            <InputField
-              label="Invoice No"
-              value={selectedWorkOrder.invoice_no}
-              onChange={(e) =>
-                setSelectedWorkOrder({ ...selectedWorkOrder, invoice_no: e.target.value })
-              }
-            />
-            <InputField
-              label="Customer Name"
-              value={selectedWorkOrder.customer_name}
-              onChange={(e) =>
-                setSelectedWorkOrder({ ...selectedWorkOrder, customer_name: e.target.value })
-              }
-            />
-
-            <div className="flex justify-end">
-              <button
-                onClick={handleEditSave}
-                className="px-4 py-2 rounded text-white bg-yellow-600 hover:bg-yellow-700"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        )}
+        <div className="grid md:grid-cols-3 gap-4">
+          <input
+            name="job_sheet_no"
+            value={filters.job_sheet_no}
+            onChange={handleInputChange}
+            className="p-2 border rounded w-full text-black"
+            placeholder="Job Sheet Number"
+          />
+          <input
+            name="phone_number"
+            value={filters.phone_number}
+            onChange={handleInputChange}
+            className="p-2 border rounded w-full text-black"
+            placeholder="Phone Number"
+          />
+          <input
+            name="imei_number"
+            value={filters.imei_number}
+            onChange={handleInputChange}
+            className="p-2 border rounded w-full text-black"
+            placeholder="IMEI Number"
+          />
+          <Select
+            options={[
+              { value: "", label: "All Submission Categories" },
+              { value: "Walk-In", label: "Walk-In" },
+              { value: "Pickup", label: "Pickup" },
+              { value: "Courier", label: "Courier" },
+            ]}
+            value={{
+              value: filters.submission_category,
+              label: filters.submission_category || "All Submission Categories",
+            }}
+            onChange={(selected) =>
+              setFilters({ ...filters, submission_category: selected.value })
+            }
+            className="text-black"
+          />
+          <Select
+            options={[
+              { value: "", label: "All Repair Categories" },
+              { value: "Software", label: "Software" },
+              { value: "Hardware", label: "Hardware" },
+              { value: "Replacement", label: "Replacement" },
+            ]}
+            value={{
+              value: filters.repair_category,
+              label: filters.repair_category || "All Repair Categories",
+            }}
+            onChange={(selected) =>
+              setFilters({ ...filters, repair_category: selected.value })
+            }
+            className="text-black"
+          />
+          <Select
+            options={[
+              { value: "", label: "All Statuses" },
+              { value: "Received", label: "Received" },
+              { value: "In Progress", label: "In Progress" },
+              { value: "Completed", label: "Completed" },
+              { value: "Delivered", label: "Delivered" },
+              { value: "Closed", label: "Closed" },
+            ]}
+            value={{
+              value: filters.status,
+              label: filters.status || "All Statuses",
+            }}
+            onChange={(selected) =>
+              setFilters({ ...filters, status: selected.value })
+            }
+            className="text-black"
+          />
+        </div>
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            onClick={() => {
+              handleSearch();
+              setIsFilterModalOpen(false);
+            }}
+            className="bg-[var(--secondary)] text-white px-4 py-2 rounded hover:bg-[var(--primary)]"
+          >
+            Search
+          </button>
+          <button
+            onClick={() => {
+              handleReset();
+              setIsFilterModalOpen(false);
+            }}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Reset
+          </button>
+        </div>
       </Modal>
     </div>
   );
 }
 
-// Reusable Toggle Button
-function ButtonToggle({ label, icon, isActive, onClick }) {
-  return (
-    <div
-      className={`flex items-center gap-1 px-4 py-2 rounded-xl text-white cursor-pointer transition-all duration-300 ${
-        isActive ? "bg-red-500 hover:bg-red-800" : "bg-purple-600 hover:bg-purple-800"
-      }`}
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-    >
-      {isActive ? (
-        <>
-          <IoIosCloseCircle size={20} />
-          Close
-        </>
-      ) : (
-        <>
-          {icon}
-          {label}
-        </>
-      )}
-    </div>
-  );
-}
-
-// Row Component for Modal View
 function DetailRow({ label, value }) {
   return (
     <div>
       <p className="text-sm font-medium">{label}</p>
       <p className="text-base">{value || "N/A"}</p>
-    </div>
-  );
-}
-
-// Reusable input field for edit form
-function InputField({ label, value, onChange }) {
-  return (
-    <div>
-      <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-      <input
-        type="text"
-        value={value}
-        onChange={onChange}
-        className="w-full mt-1 px-3 py-2 text-black rounded border border-gray-300 dark:bg-gray-800 dark:text-white"
-      />
     </div>
   );
 }

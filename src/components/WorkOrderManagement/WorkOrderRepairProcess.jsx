@@ -1,11 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaPlus, FaMinus, FaSearch } from "react-icons/fa";
+
+// 🔧 Mock part lookup function
+const mockPartLookup = (partId) => {
+  const parts = {
+    "P001": {
+      name: "Charging Port",
+      description: "Original charging port",
+      replacedBy: "Engineer A",
+      replacementDate: "2025-06-28",
+      quality: "High",
+      cost: "₹450",
+    },
+    "P002": {
+      name: "Battery",
+      description: "High capacity battery",
+      replacedBy: "Engineer B",
+      replacementDate: "2025-06-28",
+      quality: "Medium",
+      cost: "₹750",
+    },
+    "P003": {
+      name: "Display Screen",
+      description: "AMOLED screen",
+      replacedBy: "Engineer C",
+      replacementDate: "2025-06-28",
+      quality: "High",
+      cost: "₹1,500",
+    },
+  };
+  return parts[partId] || null;
+};
 
 export default function WorkOrderRepairProcess() {
+  const [parts, setParts] = useState([{ partId: "", data: null }]);
+
+  const handlePartIdChange = (index, value) => {
+    const updated = [...parts];
+    updated[index].partId = value;
+    setParts(updated);
+  };
+
+  const fetchPartDetails = (index) => {
+    const part = mockPartLookup(parts[index].partId);
+    const updated = [...parts];
+    updated[index].data = part;
+    setParts(updated);
+  };
+
+  const addPartField = () => {
+    setParts([...parts, { partId: "", data: null }]);
+  };
+
+  const removePartField = (index) => {
+    const updated = parts.filter((_, i) => i !== index);
+    setParts(updated);
+  };
+
   return (
-    <div className="max-h-[72vh] overflow-y-auto custom-scrollbar px-6 py-4 bg-white dark:bg-black rounded space-y-6">
+    <div className="max-h-[46vh] overflow-y-auto custom-scrollbar px-6 py-4 bg-white dark:bg-black rounded space-y-6">
       {/* Section 1: Customer Information */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        <h2 className="text-xl font-semibold text-[var(--primary)] dark:text-[var(--primary)] mb-2">
           Customer Information
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -21,7 +77,7 @@ export default function WorkOrderRepairProcess() {
 
       {/* Section 2: Engineer Diagnose Info */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-blue-300 mb-2">
+        <h2 className="text-xl font-semibold text-[var(--primary)] mb-2">
           Engineer Diagnose Info
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -42,42 +98,82 @@ export default function WorkOrderRepairProcess() {
         </div>
       </div>
 
-      {/* Section 3: Parts Replacement Info as Enhanced Table */}
+      {/* Section 3: Dynamic Parts Replacement */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-green-300 mb-2">
+        <h2 className="text-xl font-semibold text-[var(--primary)] dark:text-[var(--primary)] mb-2">
           Parts Replacement Info
         </h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse border border-gray-300 dark:border-gray-600">
-            <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
-              <tr>
-                <th className="px-4 py-2 border">S.No</th>
-                <th className="px-4 py-2 border">Part Name</th>
-                <th className="px-4 py-2 border">Description</th>
-                <th className="px-4 py-2 border">Replaced By</th>
-                <th className="px-4 py-2 border">Replacement Date</th>
-                <th className="px-4 py-2 border">Quality</th>
-                <th className="px-4 py-2 border">Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-gray-700 dark:text-gray-200">
-                <td className="px-4 py-2 border">1</td>
-                <td className="px-4 py-2 border">Charging Port</td>
-                <td className="px-4 py-2 border">Original charging port replacement</td>
-                <td className="px-4 py-2 border">Engineer A</td>
-                <td className="px-4 py-2 border">2025-06-28</td>
-                <td className="px-4 py-2 border">High</td>
-                <td className="px-4 py-2 border">₹450</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+
+        {parts.map((partEntry, index) => (
+          <div
+            key={index}
+            className="mb-4 border p-4 rounded bg-gray-50 dark:bg-gray-800"
+          >
+            <div className="flex flex-wrap gap-2 md:gap-4 items-end">
+              <div className="w-[400px]">
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  Part ID
+                </label>
+                <input
+                  type="text"
+                  value={partEntry.partId}
+                  onChange={(e) => handlePartIdChange(index, e.target.value)}
+                  placeholder="Enter Part ID"
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 dark:text-gray-300"
+                />
+              </div>
+
+              <button
+    type="button"
+    onClick={() => fetchPartDetails(index)}
+    className="bg-[var(--secondary)] hover:bg-[var(--primary)] text-white p-2 rounded-full transition"
+    title="Fetch Part Details"
+  >
+  <FaSearch/>
+  </button>
+
+  {/* Remove Button */}
+  {parts.length > 1 && (
+    <button
+      type="button"
+      onClick={() => removePartField(index)}
+      className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition"
+      title="Remove Part"
+    >
+      <FaMinus />
+    </button>
+  )}
+
+  {/* Add Button */}
+  {index === parts.length - 1 && (
+    <button
+      type="button"
+      onClick={addPartField}
+      className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition"
+      title="Add Part"
+    >
+      <FaPlus />
+    </button>
+              )}
+            </div>
+
+            {partEntry.data && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-gray-700 dark:text-gray-200">
+                <p><strong>Part Name:</strong> {partEntry.data.name}</p>
+                <p><strong>Description:</strong> {partEntry.data.description}</p>
+                <p><strong>Replaced By:</strong> {partEntry.data.replacedBy}</p>
+                <p><strong>Date:</strong> {partEntry.data.replacementDate}</p>
+                <p><strong>Quality:</strong> {partEntry.data.quality}</p>
+                <p><strong>Cost:</strong> {partEntry.data.cost}</p>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Section 4: Final Remarks */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-purple-300 mb-2">
+        <h2 className="text-xl font-semibold dark:text-purple-300 mb-2">
           Final Remarks
         </h2>
         <textarea
@@ -89,7 +185,7 @@ export default function WorkOrderRepairProcess() {
 
       {/* Submit Button */}
       <div className="text-right">
-        <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+        <button className="bg-[var(--secondary)] dark:bg-[var(--primary)] text-white px-6 py-2 rounded hover:bg-[var(--primary)] transition">
           Submit
         </button>
       </div>
@@ -97,6 +193,7 @@ export default function WorkOrderRepairProcess() {
   );
 }
 
+// Reusable Field Components
 function InputField({ label, type = "text" }) {
   return (
     <div>

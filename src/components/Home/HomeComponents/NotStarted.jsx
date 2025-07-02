@@ -20,7 +20,7 @@ function NotStarted() {
   };
 
   return (
-    <div className="p-2 space-y-3 max-h-[70vh] overflow-y-auto">
+    <div className="p-2 space-y-3 max-h-[60vh] overflow-y-auto">
       {todoList.map((item) => (
         <div
           key={item.id}

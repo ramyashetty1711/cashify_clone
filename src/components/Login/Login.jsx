@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { SpinnerCircularFixed } from "spinners-react";
 import LoginIllustration from "../../assets/LoginIllustration.jpg";
 
+// Background icon imports
+import ChatIcon from "../../assets/Icons/Mail.svg";
+import UserIcon from "../../assets/Icons/User.svg";
+import ShieldIcon from "../../assets/Icons/Notification.svg";
+import Lock from "../../assets/Icons/Lock.svg";
+import calendar from "../../assets/Icons/calendar.svg";
+import clipboard from "../../assets/Icons/clipboard.svg";
+
+const icons = [ChatIcon, UserIcon, ShieldIcon, Lock, ChatIcon, UserIcon, ShieldIcon, calendar, clipboard ];
+
 const Login = () => {
   const [IsLoading, setIsLoading] = useState(false);
   const Navigate = useNavigate();
@@ -18,15 +28,32 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#7e2b8f] via-[#8d409c] to-[#bababa] flex justify-center items-center px-4 py-2">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden">
-        
+    <div className="relative min-h-screen bg-gradient-to-br from-[#7e2b8f] via-[#8d409c] to-[#bababa] flex justify-center items-center px-4 py-2 overflow-hidden">
+      
+      {/* Floating Icons on Purple BG */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {icons.map((icon, index) => (
+          <img
+            key={index}
+            src={icon}
+            className="absolute w-8 h-8 opacity-50 animate-floating"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${index * 1.5}s`,
+            }}
+            alt={`icon-${index}`}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 w-full max-w-4xl bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden">
         {/* Left Image Section */}
         <div className="relative md:w-[50%] h-[300px] md:h-auto">
           <img
             src={LoginIllustration}
             alt="Login Illustration"
-            className="absolute inset-0  w-full h-full"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40 z-0" />
           <div className="relative z-10 p-6 md:p-10 text-white flex flex-col justify-center h-full">
@@ -35,15 +62,15 @@ const Login = () => {
             </div>
             <div className="bg-black/70 p-5 rounded-lg mt-5">
               <h2 className="text-2xl md:text-3xl font-bold leading-snug">
-              Welcome to{" "}
-              <br/>
-              <span className="bg-gradient-to-r text-5xl from-[#dc31ff] via-[#cd65e1] to-[#bababa] bg-clip-text text-transparent">
-                Switch Kart
-              </span>
-            </h2>
-            <p className="text-sm md:text-base mt-2 text-gray-300 font-semibold">
-              Switch to be better
-            </p>
+                Welcome to
+                <br />
+                <span className="bg-gradient-to-r text-5xl from-[#dc31ff] via-[#cd65e1] to-[#bababa] bg-clip-text text-transparent">
+                  Switch Kart
+                </span>
+              </h2>
+              <p className="text-sm md:text-base mt-2 text-gray-300 font-semibold">
+                Switch to be better
+              </p>
             </div>
           </div>
         </div>
@@ -53,7 +80,6 @@ const Login = () => {
           <div className="w-full max-w-md space-y-6">
             <div className="text-2xl font-semibold text-gray-700">Login</div>
 
-            {/* Username */}
             <div className="flex flex-col text-start">
               <label className="text-gray-500 text-base font-medium mb-1">
                 Username
@@ -65,7 +91,6 @@ const Login = () => {
               />
             </div>
 
-            {/* Password */}
             <div className="flex flex-col text-start">
               <label className="text-gray-500 text-base font-medium mb-1">
                 Password
@@ -83,9 +108,8 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
-              className={`w-full py-3 rounded-xl text-white font-medium transition mt-10 flex justify-center text-center duration-300 ${
+              className={`w-full py-3 rounded-xl text-white font-medium transition mt-10 flex justify-center duration-300 ${
                 IsLoading
                   ? "bg-gradient-to-r from-[#d644f3] to-[#7f2c90] opacity-60 cursor-progress"
                   : "bg-gradient-to-r from-[#d644f3] to-[#7f2c90] hover:from-[#e95aff] hover:to-[#6e1f82]"
@@ -105,7 +129,6 @@ const Login = () => {
               )}
             </button>
 
-            {/* Footer */}
             <div className="text-center text-sm text-gray-500 font-medium pt-4">
               <hr className="mb-3 border-gray-300" />
               Need help in login?{" "}

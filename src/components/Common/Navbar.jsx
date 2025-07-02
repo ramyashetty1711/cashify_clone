@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { RxCross2 } from "react-icons/rx"; // Close icon
+import { RxCross2 } from "react-icons/rx";
 import Logo from "../../assets/Logo.png";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import ProfilePopover from "./ProfilePopover";
@@ -15,9 +15,6 @@ const Navbar = () => {
     { display: "Home", link: "/home" },
     { display: "SC Management", link: "/sc-management" },
     { display: "Work Order Management", link: "/workorder" },
-    // { display: "Service Management", link: "/service-management" },
-    // { display: "Spare Parts Management", link: "/spare-parts-management" },
-    // { display: "Device Management", link: "/device-management" },
     { display: "Artice Management", link: "/artice-management" },
     { display: "Basic Data", link: "/basic-data" },
     { display: "Report Management", link: "/report-management" },
@@ -25,40 +22,30 @@ const Navbar = () => {
   ];
 
   return (
-    <>
-      {/* Top Bar */}
-      <div className="h-fit py-3 w-full bg-white hover:shadow-lg dark:bg-[#383838] hover:shadow-purple-200 transition-all duration-500 flex flex-row justify-between items-center relative z-[100]">
+    <div className="h-screen flex flex-col">
+      {/* Top Navbar */}
+      <div className="h-[70px] py-3 px-4 bg-white dark:bg-[#383838] flex justify-between items-center shadow z-10">
         {/* Logo */}
-        <Link
-          className="mx-3 self-center flex flex-row bg-[linear-gradient(102deg,#eb77ff,#f0e3f3)] rounded-lg"
-          to={"/home"}
-        >
+        <Link to={"/home"} className="flex items-center bg-gradient-to-r from-purple-200 to-purple-50 rounded-lg p-1">
           <img src={Logo} width={90} alt="Logo" />
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex w-full lg:w-fit lg:h-full py-8 lg:py-0 px-5 lg:px-0 flex-col lg:flex-row items-center lg:gap-10">
-          <ul className="flex">
+        <div className="hidden lg:flex gap-4 items-center">
+          <ul className="flex gap-3">
             {MenuData.map((menu, index) => (
-              <li
-                key={index}
-                className={`relative group w-full lg:w-fit h-fit lg:h-full p-1`}
-              >
-               <Link
-  to={menu.link}
-  className={`group w-full lg:w-fit h-fit px-3 py-2 rounded-md transition-all duration-300 font-semibold flex items-center gap-2
-    ${Location.pathname.includes(menu.link)
-      ? 'text-purple-600 underline hover:text-purple-700 dark:text-purple-400 font-bold underline' 
-      : 'text-gray-400 hover:text-purple-600 dark:text-white'}
-    bg-white dark:bg-[#383838]
-    focus:outline-none border-none`}
->
+              <li key={index}>
+                <Link
+                  to={menu.link}
+                  className={`px-3 py-2 rounded-md font-semibold transition duration-200 ${
+                    Location.pathname.includes(menu.link)
+                      ? "text-purple-600 dark:text-purple-300 underline"
+                      : "text-gray-600 dark:text-white hover:text-purple-700"
+                  }`}
+                >
                   {menu.display}
                   {menu.children && (
-                    <TiArrowSortedDown
-                      className="ms-2 group-hover:rotate-[180deg] transition-all duration-300 group-hover:scale-[1.25] group-hover:!text-blue-500"
-                      size={18}
-                    />
+                    <TiArrowSortedDown className="ml-1 inline-block" size={16} />
                   )}
                 </Link>
               </li>
@@ -66,14 +53,9 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Profile + Hamburger Section (for all screens) */}
-        <div className="flex items-center gap-4 pe-4 lg:pe-2">
-          {/* ProfilePopover always visible */}
-          <div>
-            <ProfilePopover />
-          </div>
-
-          {/* Mobile Hamburger Toggle */}
+        {/* Right: Profile + Mobile Menu */}
+        <div className="flex items-center gap-4">
+          <ProfilePopover />
           <button
             className="lg:hidden text-2xl text-purple-700 dark:text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -83,16 +65,16 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Content */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white dark:bg-[#383838] px-4 py-4 shadow-md z-40">
+        <div className="lg:hidden bg-white dark:bg-[#383838] px-4 py-4 shadow z-20">
           <ul className="flex flex-col gap-3">
             {MenuData.map((menu, index) => (
               <li key={index}>
                 <Link
                   to={menu.link}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-sm font-medium ${
+                  className={`block px-3 py-2 rounded-md font-medium ${
                     Location.pathname.includes(menu.link)
                       ? "text-purple-700 dark:text-purple-300"
                       : "text-gray-800 dark:text-white hover:bg-purple-100 dark:hover:bg-gray-700"
@@ -107,15 +89,18 @@ const Navbar = () => {
       )}
 
       {/* Main Layout */}
-      <div className="min-h-[100vh] bg-gray-100 flex flex-col lg:grid lg:grid-cols-5 lg:grid-rows-5">
-        <div className="bg-gray-100 dark:bg-[#383838] lg:col-span-4 lg:row-span-5 col-span-4 min-h-[100vh] p-2">
+      <div className="flex-grow grid lg:grid-cols-5 h-[calc(100vh-70px)] overflow-hidden">
+        {/* Main content */}
+        <div className="lg:col-span-4 bg-gray-100 dark:bg-[#2f2f2f] overflow-y-auto p-4">
           <Outlet />
         </div>
-        <div className="bg-gray-100 dark:bg-[#383838] lg:row-span-5 lg:col-start-5 lg:block hidden p-2">
+
+        {/* Optional Side Profile */}
+        <div className="hidden lg:block lg:col-span-1 bg-gray-100 dark:bg-[#383838] overflow-y-auto p-4">
           <SideBarProfile />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

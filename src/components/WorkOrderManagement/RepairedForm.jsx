@@ -29,9 +29,9 @@ export default function RepairedForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 p-6 bg-white dark:bg-gray-900 rounded shadow max-h-[72vh] overflow-y-auto custom-scrollbar"
+      className="space-y-6 p-6 bg-white dark:bg-gray-900 rounded  max-h-[47vh] overflow-y-auto custom-scrollbar"
     >
-      <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
+      <h2 className="text-2xl font-semibold text-[var(--primary)] dark:text-[var(--primary)] mb-4">
         Repaired Handover Form
       </h2>
 
@@ -117,7 +117,7 @@ export default function RepairedForm() {
       <div className="text-right mt-4">
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition"
+          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded transition"
         >
           Handover
         </button>
