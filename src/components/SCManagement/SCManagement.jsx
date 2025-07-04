@@ -10,14 +10,12 @@ const serviceCenter = {
 };
 
 const applicants = [
-  
-  
   {
     name: "Ravi Kumar",
     ratings: [
       {
         service: "Camera Repair",
-        rating: 4.6,
+        rating: 2.0,
         jobId: "JOB125",
         review: "Crystal clear camera now!",
         explanationRating: "Good",
@@ -29,7 +27,7 @@ const applicants = [
       },
     ],
   },
-    {
+  {
     name: "Anjali Rao",
     ratings: [
       {
@@ -44,7 +42,6 @@ const applicants = [
         wouldRecommend: "Yes",
         improvementSuggestion: "Faster response time",
       },
-      
     ],
   },
   {
@@ -64,19 +61,18 @@ const applicants = [
       },
     ],
   },
-
 ];
 
 const ratingOptions = [
-  { value: '', label: 'All Ratings' },
-  { value: '4.0', label: '4.0+' },
-  { value: '4.5', label: '4.5+' },
-  { value: '4.7', label: '4.7+' },
+  { value: "", label: "All Ratings" },
+  { value: "4.0", label: "4.0 & above" },
+  { value: "3.0", label: "3.0 & above" },
+  { value: "2.0", label: "2.0 & above" },
 ];
 
 export default function SCManagement() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [minRating, setMinRating] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [minRating, setMinRating] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReviewData, setSelectedReviewData] = useState(null);
 
@@ -141,21 +137,21 @@ export default function SCManagement() {
             placeholder="Search by name"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none"
+            className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none text-black"
           />
         </div>
         <Select
           options={ratingOptions}
-          defaultValue={ratingOptions[0]}
+          value={ratingOptions.find((opt) => opt.value === minRating)}
           onChange={(s) => setMinRating(s.value)}
           isSearchable={false}
-          className="w-full md:w-1/2 text-sm"
+          className="w-full md:w-1/2 text-sm text-black"
           styles={{
             control: (base) => ({
               ...base,
-              minHeight: '36px',
-              borderColor: '#d1d5db',
-              fontSize: '0.875rem',
+              minHeight: "36px",
+              borderColor: "#d1d5db",
+              fontSize: "0.875rem",
             }),
           }}
         />
@@ -173,7 +169,9 @@ export default function SCManagement() {
                 setIsModalOpen(true);
               }}
             >
-              <h4 className="text-sm font-semibold text-purple-600 mb-1">{a.name}</h4>
+              <h4 className="text-sm font-semibold text-purple-600 mb-1">
+                {a.name}
+              </h4>
               <p className="text-xs text-gray-600">Service: {r.service}</p>
               <p className="text-xs text-gray-500">Job ID: {r.jobId}</p>
               <div className="flex items-center mt-1 text-yellow-500 text-sm">
@@ -188,35 +186,68 @@ export default function SCManagement() {
       </div>
 
       {/* Modal */}
-       <Modal
+      <Modal
         size="xl"
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={<h2 className="text-lg text-purple-600 font-bold">Review Details</h2>}
+        title={
+          <h2 className="text-lg text-purple-600 font-bold">Review Details</h2>
+        }
       >
         {selectedReviewData && (
           <div className="space-y-3 max-h-[70vh] border p-5 rounded-lg overflow-y-auto text-gray-700 text-sm custom-scrollbar">
-            <p><strong>Service:</strong> {selectedReviewData.service}</p>
-            <p><strong>Job ID:</strong> {selectedReviewData.jobId}</p>
-            <p><strong>Review:</strong> <em>{selectedReviewData.review}</em></p>
+            <p>
+              <strong>Service:</strong> {selectedReviewData.service}
+            </p>
+            <p>
+              <strong>Job ID:</strong> {selectedReviewData.jobId}
+            </p>
+            <p>
+              <strong>Review:</strong>{" "}
+              <em>{selectedReviewData.review}</em>
+            </p>
             <hr className="my-2" />
-            <p className="p-2 border border-gray-200 rounded-lg"><strong>Did the engineer clearly explain the solution?</strong><br />
-              <span className="text-purple-700">{selectedReviewData.explanationRating}</span>
+            <p className="p-2 border border-gray-200 rounded-lg">
+              <strong>Did the engineer clearly explain the solution?</strong>
+              <br />
+              <span className="text-purple-700">
+                {selectedReviewData.explanationRating}
+              </span>
             </p>
-            <p className="p-2 border border-gray-200 rounded-lg"><strong>Helpfulness of the engineer?</strong><br />
-              <span className="text-purple-700">{selectedReviewData.helpfulnessRating}</span>
+            <p className="p-2 border border-gray-200 rounded-lg">
+              <strong>Helpfulness of the engineer?</strong>
+              <br />
+              <span className="text-purple-700">
+                {selectedReviewData.helpfulnessRating}
+              </span>
             </p>
-            <p className="p-2 border border-gray-200 rounded-lg"><strong>Overall Service Rating (1–5)?</strong><br />
-              <span className="text-purple-700">{selectedReviewData.overallServiceRating}</span>
+            <p className="p-2 border border-gray-200 rounded-lg">
+              <strong>Overall Service Rating (1–5)?</strong>
+              <br />
+              <span className="text-purple-700">
+                {selectedReviewData.overallServiceRating}
+              </span>
             </p>
-            <p className="p-2 border border-gray-200 rounded-lg"><strong>Overall Satisfaction?</strong><br />
-              <span className="text-purple-700">{selectedReviewData.overallSatisfaction}</span>
+            <p className="p-2 border border-gray-200 rounded-lg">
+              <strong>Overall Satisfaction?</strong>
+              <br />
+              <span className="text-purple-700">
+                {selectedReviewData.overallSatisfaction}
+              </span>
             </p>
-            <p className="p-2 border border-gray-200 rounded-lg"><strong>Would Recommend?</strong><br />
-              <span className="text-purple-700">{selectedReviewData.wouldRecommend}</span>
+            <p className="p-2 border border-gray-200 rounded-lg">
+              <strong>Would Recommend?</strong>
+              <br />
+              <span className="text-purple-700">
+                {selectedReviewData.wouldRecommend}
+              </span>
             </p>
-            <p className="p-2 border border-gray-200 rounded-lg"><strong>Improvement Suggestion:</strong><br />
-              <span className="text-purple-700 italic">{selectedReviewData.improvementSuggestion}</span>
+            <p className="p-2 border border-gray-200 rounded-lg">
+              <strong>Improvement Suggestion:</strong>
+              <br />
+              <span className="text-purple-700 italic">
+                {selectedReviewData.improvementSuggestion}
+              </span>
             </p>
           </div>
         )}

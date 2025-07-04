@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
-// Mock device data based on IMEI
+// Mock device data
 const mockDeviceLookup = (imei) => {
   const data = {
     "123456789012345": {
@@ -17,32 +20,44 @@ const mockDeviceLookup = (imei) => {
   return data[imei] || null;
 };
 
-const FormField = [
-  { key: "customer_name", display: "Customer Name", required: true },
-  { key: "contact_no", display: "Contact No", required: true },
-  { key: "alternate_no", display: "Alternate No", required: false },
-  { key: "address", display: "Address", required: true },
-  { key: "mail_id", display: "Mail ID", required: true },
-  { key: "comm_channel", display: "Comm Channel", required: false },
-];
-
 const DeviceFields = [
-  { key: "ram", display: "RAM", required: false },
-  { key: "invoice_no", display: "Invoice No", required: true },
-  { key: "model", display: "Model", required: true },
-  { key: "color", display: "Color", required: false },
-  { key: "activation_date", display: "Activation Date", type: "date", required: false },
-  { key: "dop", display: "Date of Purchase", type: "date", required: false },
-  { key: "warranty_status", display: "Warranty Status", required: false },
-  { key: "remarks", display: "Remarks", type: "textarea", required: false },
+  { key: "ram", display: "RAM" },
+  { key: "invoice_no", display: "Invoice No" },
+  { key: "model", display: "Model" },
+  { key: "color", display: "Color" },
+  { key: "activation_date", display: "Activation Date", type: "date" },
+  { key: "dop", display: "Date of Purchase", type: "date" },
+  { key: "warranty_status", display: "Warranty Status" },
 ];
 
 export default function DynamicDeviceForm() {
   const [formData, setFormData] = useState({});
   const [notFound, setNotFound] = useState(false);
-  const [deviceFetched, setDeviceFetched] = useState(false);
   const [imeiEmpty, setImeiEmpty] = useState(false);
+  const printRef = useRef();
 
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: "Customer_Issue_Form",
+  });
+
+  const handleDownloadPDF = async () => {
+    const input = printRef.current;
+    if (!input) return;
+
+    const canvas = await html2canvas(input, {
+      scale: 2,
+      useCORS: true,
+    });
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("Customer_Issue_Form.pdf");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,161 +68,175 @@ export default function DynamicDeviceForm() {
   };
 
   const fetchDeviceInfo = () => {
-  if (!formData.imei || formData.imei.trim() === "") {
-    setImeiEmpty(true);
-    setNotFound(false);
-    setDeviceFetched(false);
-    return;
-  }
-
-  setImeiEmpty(false); // Clear previous warning
-
-  const deviceDetails = mockDeviceLookup(formData.imei);
-  if (deviceDetails) {
-    setFormData((prev) => ({
-      ...prev,
-      ...deviceDetails,
-    }));
-    setDeviceFetched(true);
-    setNotFound(false);
-  } else {
-    setNotFound(true);
-    setDeviceFetched(false);
-  }
-};
-
+    if (!formData.imei?.trim()) {
+      setImeiEmpty(true);
+      setNotFound(false);
+      return;
+    }
+    setImeiEmpty(false);
+    const deviceDetails = mockDeviceLookup(formData.imei);
+    if (deviceDetails) {
+      setFormData((prev) => ({
+        ...prev,
+        ...deviceDetails,
+      }));
+      setNotFound(false);
+    } else {
+      setNotFound(true);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    alert("Form Submitted! Check the console.");
+    console.log("Submitted:", formData);
+    alert("Form Submitted. Check console.");
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="space-y-10 max-h-[46vh] overflow-y-auto custom-scrollbar">
+    <div className="p-6 max-h-[45vh] overflow-y-auto custom-scrollbar">
+      <div ref={printRef} className="space-y-10 bg-white p-6 rounded">
+        <form onSubmit={handleSubmit}>
+          {/* Customer Section */}
+          <section className="space-y-4">
+            <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">Customer & Address Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                { name: "full_name", label: "Full Name *", required: true },
+                { name: "contact_no", label: "Contact No *", required: true },
+                { name: "alternate_no", label: "Alternate No" },
+                { name: "mail_id", label: "Mail ID *", type: "email", required: true },
+                { name: "comm_channel", label: "Communication Channel" },
+                { name: "address_line1", label: "Address Line 1 *", required: true },
+                { name: "address_line2", label: "Address Line 2" },
+                { name: "city", label: "City *", required: true },
+                { name: "state", label: "State *", required: true },
+                { name: "pincode", label: "Pincode *", required: true },
+              ].map(({ name, label, type = "text", required }) => (
+                <div key={name}>
+                  <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+                    {label}
+                  </label>
+                  <input
+                    id={name}
+                    name={name}
+                    type={type}
+                    value={formData[name] || ""}
+                    onChange={handleChange}
+                    required={required}
+                    className="border p-2 w-full rounded border-gray-300 text-black"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
 
-        {/* Customer Info */}
-        <section className="p-6 border rounded-xl  bg-white dark:bg-gray-900">
-          <h3 className="text-xl font-bold text-[var(--primary)] mb-6 border-b pb-2">
-            Customer Information
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {FormField.map((field) => (
-              <div key={field.key}>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  {field.display}
-                  {field.required && <span className="text-red-500 ml-1">*</span>}
+          {/* Device Info Section */}
+          <section className="space-y-4 mt-5 ">
+            <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">Device Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+              <div>
+                <label htmlFor="imei" className="block text-sm font-medium text-gray-700 mb-1">
+                  IMEI *
                 </label>
                 <input
-                  type="text"
-                  name={field.key}
-                  required={field.required}
-                  value={formData[field.key] || ""}
+                  id="imei"
+                  name="imei"
+                  value={formData.imei || ""}
                   onChange={handleChange}
-                  placeholder={field.display}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[var(--secondary)]"
+                  className="border p-2 w-full rounded border-gray-300 text-black"
+                  required
                 />
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* IMEI Section */}
-        <section className="p-6 border rounded-xl  bg-white dark:bg-gray-900">
-          <h3 className="text-xl font-bold text-[var(--primary)] mb-6 border-b pb-2">
-            Enter IMEI to Fetch Device Info
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-            <div>
-              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                IMEI <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="imei"
-                value={formData.imei || ""}
-                onChange={handleChange}
-                placeholder="IMEI"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-white dark:border-gray-700 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            <div>
               <button
                 type="button"
                 onClick={fetchDeviceInfo}
-                className="mt-1 bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-800"
+                className="bg-[var(--secondary)] text-white px-2  py-2 rounded hover:bg-[var(--primary)] h-fit self-end"
               >
                 Fetch
               </button>
             </div>
-          </div>
-
-          {/* Error shown below without affecting layout */}
-          {imeiEmpty && (
-  <div className="mt-4 text-red-500 text-sm">
-    Please enter an IMEI number before fetching.
-  </div>
-)}
-
-{notFound && (
-  <div className="mt-2 text-red-500 text-sm">
-    No device found for this IMEI.
-  </div>
-)}
-
-        </section>
-
-        {/* Device Info */}
-        {deviceFetched && (
-          <section className="p-6 border rounded-xl  bg-white dark:bg-gray-900">
-            <h3 className="text-xl font-bold text-[var(--primary)] mb-6 border-b pb-2">
-              Device Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {DeviceFields.map((field) => {
-                const commonProps = {
-                  name: field.key,
-                  value: formData[field.key] || "",
-                  placeholder: field.display,
-                  readOnly: true,
-                  className:
-                    "w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 bg-gray-100 cursor-not-allowed dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none",
-                };
-
-                return field.type === "textarea" ? (
-                  <div key={field.key} className="md:col-span-3">
-                    <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                      {field.display}
-                      {field.required && <span className="text-red-500 ml-1">*</span>}
-                    </label>
-                    <textarea rows="3" {...commonProps} />
-                  </div>
-                ) : (
-                  <div key={field.key}>
-                    <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                      {field.display}
-                      {field.required && <span className="text-red-500 ml-1">*</span>}
-                    </label>
-                    <input type={field.type || "text"} {...commonProps} />
-                  </div>
-                );
-              })}
+            {imeiEmpty && <p className="text-red-500 text-sm">Please enter an IMEI.</p>}
+            {notFound && <p className="text-red-500 text-sm">No device found for this IMEI.</p>}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {DeviceFields.map((field) => (
+                <div key={field.key}>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {field.display}
+                  </label>
+                  <input
+                    type={field.type || "text"}
+                    name={field.key}
+                    value={formData[field.key] || ""}
+                    readOnly
+                    className="border p-2 w-full  rounded border border-gray-300 bg-gray-100 text-black cursor-not-allowed"
+                  />
+                </div>
+              ))}
             </div>
           </section>
-        )}
 
-        {/* Final Submit */}
-        <div className="text-right">
-          <button
-            type="submit"
-            className="inline-block bg-gradient-to-r from-[var(--secondary)] to-[var(--primary)] hover:from-purple-600 hover:to-purple-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+          {/* Issue Section */}
+          <section className="space-y-4 mt-5">
+            <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">Issue Information</h3>
+            <div>
+              <label htmlFor="issue_title" className="block text-sm font-medium text-gray-700 mb-1">
+                Issue Title *
+              </label>
+              <input
+                id="issue_title"
+                name="issue_title"
+                value={formData.issue_title || ""}
+                onChange={handleChange}
+                className="border p-2 w-full rounded border-gray-300 text-black "
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="issue_details" className="block text-sm font-medium text-gray-700 mb-1">
+                Issue Details *
+              </label>
+              <textarea
+                id="issue_details"
+                name="issue_details"
+                rows={4}
+                value={formData.issue_details || ""}
+                onChange={handleChange}
+                className="border p-2 w-full rounded border-gray-300 text-black"
+                required
+              ></textarea>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      {/* Button Controls */}
+      <div className="flex justify-end gap-4 mt-6">
+        <button
+          type="button"
+          onClick={() => {
+            console.log("Saved Data:", formData);
+            alert("Form data saved (not submitted). Check console.");
+          }}
+          className="bg-gray-500 text-white px-6 py-2 rounded shadow-md"
+        >
+          Save
+        </button>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="bg-green-600 text-white px-6 py-2 rounded shadow-md"
+        >
+          Submit
+        </button>
+      
+        <button
+          type="button"
+          onClick={handleDownloadPDF}
+          className="bg-purple-600 text-white px-6 py-2 rounded shadow-md"
+        >
+          Download PDF
+        </button>
+      </div>
     </div>
   );
 }

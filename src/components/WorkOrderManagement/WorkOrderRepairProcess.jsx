@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import Select from "react-select";
 import { FaPlus, FaMinus, FaSearch } from "react-icons/fa";
 
 // 🔧 Mock part lookup function
 const mockPartLookup = (partId) => {
   const parts = {
-    "P001": {
+    P001: {
       name: "Charging Port",
       description: "Original charging port",
       replacedBy: "Engineer A",
@@ -12,7 +13,7 @@ const mockPartLookup = (partId) => {
       quality: "High",
       cost: "₹450",
     },
-    "P002": {
+    P002: {
       name: "Battery",
       description: "High capacity battery",
       replacedBy: "Engineer B",
@@ -20,7 +21,7 @@ const mockPartLookup = (partId) => {
       quality: "Medium",
       cost: "₹750",
     },
-    "P003": {
+    P003: {
       name: "Display Screen",
       description: "AMOLED screen",
       replacedBy: "Engineer C",
@@ -34,6 +35,8 @@ const mockPartLookup = (partId) => {
 
 export default function WorkOrderRepairProcess() {
   const [parts, setParts] = useState([{ partId: "", data: null }]);
+  const [resolutionMethod, setResolutionMethod] = useState(null);
+  const [malfunctionCategory, setMalfunctionCategory] = useState(null);
 
   const handlePartIdChange = (index, value) => {
     const updated = [...parts];
@@ -62,7 +65,7 @@ export default function WorkOrderRepairProcess() {
       {/* Section 1: Customer Information */}
       <div>
         <h2 className="text-xl font-semibold text-[var(--primary)] dark:text-[var(--primary)] mb-2">
-          Customer Information
+          Job Sheet Information
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField label="Job Sheet Number" />
@@ -84,6 +87,8 @@ export default function WorkOrderRepairProcess() {
           <SelectField
             label="Resolution Method"
             options={["Hardware", "Software"]}
+            selected={resolutionMethod}
+            setSelected={setResolutionMethod}
           />
           <SelectField
             label="Malfunction Category"
@@ -94,6 +99,8 @@ export default function WorkOrderRepairProcess() {
               "Battery Activation",
               "Software update",
             ]}
+            selected={malfunctionCategory}
+            setSelected={setMalfunctionCategory}
           />
         </div>
       </div>
@@ -110,7 +117,7 @@ export default function WorkOrderRepairProcess() {
             className="mb-4 border p-4 rounded bg-gray-50 dark:bg-gray-800"
           >
             <div className="flex flex-wrap gap-2 md:gap-4 items-end">
-              <div className="w-[400px]">
+              <div className="w-[300px]">
                 <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                   Part ID
                 </label>
@@ -124,47 +131,57 @@ export default function WorkOrderRepairProcess() {
               </div>
 
               <button
-    type="button"
-    onClick={() => fetchPartDetails(index)}
-    className="bg-[var(--secondary)] hover:bg-[var(--primary)] text-white p-2 rounded-full transition"
-    title="Fetch Part Details"
-  >
-  <FaSearch/>
-  </button>
+                type="button"
+                onClick={() => fetchPartDetails(index)}
+                className="bg-[var(--secondary)] hover:bg-[var(--primary)] text-white p-2 rounded-full transition"
+                title="Fetch Part Details"
+              >
+                <FaSearch />
+              </button>
 
-  {/* Remove Button */}
-  {parts.length > 1 && (
-    <button
-      type="button"
-      onClick={() => removePartField(index)}
-      className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition"
-      title="Remove Part"
-    >
-      <FaMinus />
-    </button>
-  )}
+              {parts.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removePartField(index)}
+                  className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition"
+                  title="Remove Part"
+                >
+                  <FaMinus />
+                </button>
+              )}
 
-  {/* Add Button */}
-  {index === parts.length - 1 && (
-    <button
-      type="button"
-      onClick={addPartField}
-      className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition"
-      title="Add Part"
-    >
-      <FaPlus />
-    </button>
+              {index === parts.length - 1 && (
+                <button
+                  type="button"
+                  onClick={addPartField}
+                  className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition"
+                  title="Add Part"
+                >
+                  <FaPlus />
+                </button>
               )}
             </div>
 
             {partEntry.data && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-gray-700 dark:text-gray-200">
-                <p><strong>Part Name:</strong> {partEntry.data.name}</p>
-                <p><strong>Description:</strong> {partEntry.data.description}</p>
-                <p><strong>Replaced By:</strong> {partEntry.data.replacedBy}</p>
-                <p><strong>Date:</strong> {partEntry.data.replacementDate}</p>
-                <p><strong>Quality:</strong> {partEntry.data.quality}</p>
-                <p><strong>Cost:</strong> {partEntry.data.cost}</p>
+                <p>
+                  <strong>Part Name:</strong> {partEntry.data.name}
+                </p>
+                <p>
+                  <strong>Description:</strong> {partEntry.data.description}
+                </p>
+                <p>
+                  <strong>Replaced By:</strong> {partEntry.data.replacedBy}
+                </p>
+                <p>
+                  <strong>Date:</strong> {partEntry.data.replacementDate}
+                </p>
+                <p>
+                  <strong>Quality:</strong> {partEntry.data.quality}
+                </p>
+                <p>
+                  <strong>Cost:</strong> {partEntry.data.cost}
+                </p>
               </div>
             )}
           </div>
@@ -184,16 +201,28 @@ export default function WorkOrderRepairProcess() {
       </div>
 
       {/* Submit Button */}
-      <div className="text-right">
-        <button className="bg-[var(--secondary)] dark:bg-[var(--primary)] text-white px-6 py-2 rounded hover:bg-[var(--primary)] transition">
-          Submit
-        </button>
-      </div>
+      <div className="flex justify-end gap-4">
+  <button
+    type="button"
+    className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded transition"
+    onClick={() => alert("Saved successfully!")} // Replace with real save logic
+  >
+    Save
+  </button>
+
+  <button
+    type="submit"
+    className="bg-[var(--secondary)] dark:bg-[var(--primary)] text-white px-6 py-2 rounded hover:bg-[var(--primary)] transition"
+  >
+    Submit
+  </button>
+</div>
+
     </div>
   );
 }
 
-// Reusable Field Components
+// Reusable Components
 function InputField({ label, type = "text" }) {
   return (
     <div>
@@ -226,25 +255,37 @@ function DisplayField({ label, value, multiline = false }) {
   );
 }
 
-function SelectField({ label, options }) {
+function SelectField({ label, options, selected, setSelected }) {
+  const formattedOptions = options.map((opt) => ({
+    value: opt,
+    label: opt,
+  }));
+
   return (
     <div>
       <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
         {label}
       </label>
-      <select
-        className="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 dark:text-gray-300"
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Select {label}
-        </option>
-        {options.map((opt, idx) => (
-          <option key={idx} value={opt}>
-            {opt}
-          </option>
-        ))}
-      </select>
+      <Select
+        options={formattedOptions}
+        value={selected}
+        onChange={setSelected}
+        placeholder={`Select ${label}`}
+        className="text-black dark:text-white"
+        classNamePrefix="react-select"
+        styles={{
+          control: (base) => ({
+            ...base,
+            backgroundColor: "white",
+            borderColor: "#ccc",
+            padding: "2px",
+          }),
+          menu: (base) => ({
+            ...base,
+            zIndex: 9999,
+          }),
+        }}
+      />
     </div>
   );
 }

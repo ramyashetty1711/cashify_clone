@@ -314,7 +314,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
           setCredentials({ ...credentials, storeType: selected.value })
         }
         placeholder="Select role"
-        className="react-select-container text-sm"
+        className="react-select-container text-sm text-black "
         classNamePrefix="react-select"
         styles={{
           control: (base, state) => ({
@@ -340,7 +340,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
     <div className="flex justify-end gap-4 pt-6">
       <button
         onClick={() => setIsCredentialsModalOpen(false)}
-        className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-shadow"
+        className="px-4 py-2 rounded-md   text-white dark:text-white bg-red-500 dark:bg-gray-800 hover:bg-red-600 dark:hover:bg-red-600 transition-shadow"
       >
         Cancel
       </button>
@@ -354,7 +354,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
           setStoreData(updated);
           setIsCredentialsModalOpen(false);
         }}
-        className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition shadow-md hover:shadow-lg"
+        className="px-5 py-2 rounded-md bg-[var(--secondary)]  hover:bg-[var(--primary)] text-white hover:from-blue-700 hover:to-blue-600 transition shadow-md hover:shadow-lg"
       >
         Save Credentials
       </button>
