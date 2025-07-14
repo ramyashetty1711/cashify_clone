@@ -15,8 +15,8 @@ const Navbar = () => {
     { display: "Home", link: "/home" },
     { display: "SC Management", link: "/sc-management" },
     { display: "Work Order Management", link: "/workorder" },
-    { display: "Artice Management", link: "/artice-management" },
-    { display: "Basic Data", link: "/basic-data" },
+    // { display: "Artice Management", link: "/artice-management" },
+    // { display: "Basic Data", link: "/basic-data" },
     { display: "Report Management", link: "/report-management" },
     { display: "Admin Tools", link: "/admin-tools" },
   ];

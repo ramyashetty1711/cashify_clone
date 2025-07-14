@@ -13,7 +13,17 @@ import Lock from "../../assets/Icons/Lock.svg";
 import calendar from "../../assets/Icons/calendar.svg";
 import clipboard from "../../assets/Icons/clipboard.svg";
 
-const icons = [ChatIcon, UserIcon, ShieldIcon, Lock, ChatIcon, UserIcon, ShieldIcon, calendar, clipboard ];
+const icons = [
+  ChatIcon,
+  UserIcon,
+  ShieldIcon,
+  Lock,
+  ChatIcon,
+  UserIcon,
+  ShieldIcon,
+  calendar,
+  clipboard,
+];
 
 const Login = () => {
   const [IsLoading, setIsLoading] = useState(false);
@@ -29,7 +39,6 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#7e2b8f] via-[#8d409c] to-[#bababa] flex justify-center items-center px-4 py-2 overflow-hidden">
-      
       {/* Floating Icons on Purple BG */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {icons.map((icon, index) => (
@@ -47,13 +56,13 @@ const Login = () => {
         ))}
       </div>
 
-      <div className="relative z-10 w-full max-w-4xl bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden">
+      <div className="relative z-10 w-full max-w-5xl bg-white rounded-2xl shadow-lg flex flex-col md:flex-row overflow-hidden">
         {/* Left Image Section */}
-        <div className="relative md:w-[50%] h-[300px] md:h-auto">
+        <div className="relative md:w-[60%] h-[300px] md:h-auto">
           <img
             src={LoginIllustration}
             alt="Login Illustration"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover opacity-70"
           />
           <div className="absolute inset-0 bg-black/40 z-0" />
           <div className="relative z-10 p-6 md:p-10 text-white flex flex-col justify-center h-full">
@@ -76,7 +85,7 @@ const Login = () => {
         </div>
 
         {/* Right Login Form Section */}
-        <div className="md:w-[50%] w-full flex items-center justify-center p-6 md:p-10 bg-white">
+        <div className="md:w-[40%] w-full flex items-center justify-center p-6 md:p-10 bg-white">
           <div className="w-full max-w-md space-y-6">
             <div className="text-2xl font-semibold text-gray-700">Login</div>
 
@@ -106,10 +115,15 @@ const Login = () => {
                   size={18}
                 />
               </div>
+              <div className="text-center mt-5">
+                <span className="text-sm text-[#a600c8] font-medium hover:underline cursor-pointer">
+                  Forgot Password?
+                </span>
+              </div>
             </div>
 
             <button
-              className={`w-full py-3 rounded-xl text-white font-medium transition mt-10 flex justify-center duration-300 ${
+              className={`w-full py-3 rounded-xl text-white font-medium transition mt-5 flex justify-center duration-300 ${
                 IsLoading
                   ? "bg-gradient-to-r from-[#d644f3] to-[#7f2c90] opacity-60 cursor-progress"
                   : "bg-gradient-to-r from-[#d644f3] to-[#7f2c90] hover:from-[#e95aff] hover:to-[#6e1f82]"

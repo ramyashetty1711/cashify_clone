@@ -132,7 +132,7 @@ export default function DynamicDeviceForm() {
 
           {/* Device Info Section */}
           <section className="space-y-4 mt-5 ">
-            <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">Device Information</h3>
+            <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">Handset Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
               <div>
                 <label htmlFor="imei" className="block text-sm font-medium text-gray-700 mb-1">
