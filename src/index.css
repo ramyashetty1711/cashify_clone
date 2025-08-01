@@ -42,13 +42,12 @@ button {
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
-  border-color: #626262;
 }
 button:hover {
   border-color: #646cff;
 }
 .dark button {
-background-color: black;
+
 }
 
 
