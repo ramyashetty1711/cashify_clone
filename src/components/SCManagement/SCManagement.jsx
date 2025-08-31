@@ -110,22 +110,23 @@ export default function SCManagement() {
       {/* Header */}
       <div className="flex items-center justify-between border-b pb-2 mb-4">
         <div>
-          <h2 className="text-lg font-semibold text-purple-700">
+          <h2 className="text-lg font-semibold text-[var(--primary)]">
             {serviceCenter.name}
           </h2>
           <div className="flex items-center text-yellow-500 text-sm">
             <FaStar className="mr-1" />
-            <span className="text-gray-700 dark:text-white font-medium">
+            <span className="text-[var(--secondary)] font-medium">
               Overall Rating: {serviceCenter.overallRating}
             </span>
           </div>
         </div>
         <button
-          onClick={handleExport}
-          className="flex items-center gap-2 px-3 py-1 text-sm rounded bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
-        >
-          <FaDownload /> Export
-        </button>
+  onClick={handleExport}
+  className="flex items-center gap-1 px-2 py-1 text-xs rounded bg-[var(--primary)] hover:bg-[var(--third)] text-white shadow-sm"
+>
+  <FaDownload className="text-sm" /> Export
+</button>
+
       </div>
 
       {/* Filters */}
@@ -137,7 +138,7 @@ export default function SCManagement() {
             placeholder="Search by name"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-purple-500 focus:outline-none text-black"
+            className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-[var(--primary)] focus:outline-none text-black"
           />
         </div>
         <Select
@@ -169,7 +170,7 @@ export default function SCManagement() {
                 setIsModalOpen(true);
               }}
             >
-              <h4 className="text-sm font-semibold text-purple-600 mb-1">
+              <h4 className="text-sm font-semibold text-[var(--primary)] mb-1">
                 {a.name}
               </h4>
               <p className="text-xs text-gray-600">Service: {r.service}</p>
@@ -191,7 +192,7 @@ export default function SCManagement() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={
-          <h2 className="text-lg text-purple-600 font-bold">Review Details</h2>
+          <h2 className="text-2xl text-[var(--primary)] font-bold">Review Details</h2>
         }
       >
         {selectedReviewData && (
@@ -210,42 +211,42 @@ export default function SCManagement() {
             <p className="p-2 border border-gray-200 rounded-lg">
               <strong>Did the engineer clearly explain the solution?</strong>
               <br />
-              <span className="text-purple-700">
+              <span className="text-[var(--primary)]">
                 {selectedReviewData.explanationRating}
               </span>
             </p>
             <p className="p-2 border border-gray-200 rounded-lg">
               <strong>Helpfulness of the engineer?</strong>
               <br />
-              <span className="text-purple-700">
+              <span className="text-[var(--primary)]">
                 {selectedReviewData.helpfulnessRating}
               </span>
             </p>
             <p className="p-2 border border-gray-200 rounded-lg">
               <strong>Overall Service Rating (1–5)?</strong>
               <br />
-              <span className="text-purple-700">
+              <span className="text-[var(--primary)]">
                 {selectedReviewData.overallServiceRating}
               </span>
             </p>
             <p className="p-2 border border-gray-200 rounded-lg">
               <strong>Overall Satisfaction?</strong>
               <br />
-              <span className="text-purple-700">
+              <span className="text-[var(--primary)]">
                 {selectedReviewData.overallSatisfaction}
               </span>
             </p>
             <p className="p-2 border border-gray-200 rounded-lg">
               <strong>Would Recommend?</strong>
               <br />
-              <span className="text-purple-700">
+              <span className="text-[var(--primary)]">
                 {selectedReviewData.wouldRecommend}
               </span>
             </p>
             <p className="p-2 border border-gray-200 rounded-lg">
               <strong>Improvement Suggestion:</strong>
               <br />
-              <span className="text-purple-700 italic">
+              <span className="text-[var(--primary)] italic">
                 {selectedReviewData.improvementSuggestion}
               </span>
             </p>

@@ -77,7 +77,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
           className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
             showAddForm
               ? "bg-red-600 text-white hover:bg-red-700"
-              : "bg-purple-600 text-white hover:bg-purple-700"
+              : "bg-[var(--primary)] text-white hover:bg-[var(--third)]"
           }`}
         >
           {showAddForm ? <><FaTimes /> Close</> : <><FaPlus /> Add Store</>}
@@ -89,7 +89,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
       {!showAddForm && (
         <div className="overflow-x-auto max-h-[65vh] custom-scrollbar mt-2">
           <table className="min-w-full table-auto border-collapse border border-gray-200 shadow-md rounded-lg overflow-hidden">
-            <thead className="bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-gray-100 sticky top-0 z-10">
+            <thead className="bg-purple-100  text-[var(--primary)] dark:text-gray-100 sticky top-0 z-10">
               <tr>
                 <th className="px-4 py-2 text-left font-medium">S.No</th>
                 <th className="px-4 py-2 text-left font-medium">Store Name</th>
@@ -114,10 +114,10 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
                     </span>
                   </td>
                   <td className="px-4 py-2 flex gap-2">
-                    <button title="View" className="p-2 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-white border border-purple-400 hover:bg-purple-600 hover:text-white transition-all" onClick={() => handleView(store)}><FaEye size={16} /></button>
+                    <button title="View" className="p-2 rounded-full bg-purple-100 text-[var(--primary)]  dark:text-white border border-[var(--primary)] hover:bg-[var(--third)] hover:text-white transition-all" onClick={() => handleView(store)}><FaEye size={16} /></button>
                     <button
   title="Add Credentials"
-  className="p-2 rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-white border border-yellow-400 hover:bg-yellow-600 hover:text-white transition-all"
+  className="p-2 rounded-full bg-gray-100 text-[var(--secondary)]  dark:text-white border border-[var(--secondary)] hover:bg-[var(--secondary)] hover:text-white transition-all"
   onClick={() => handleOpenCredentialsModal(store)}
 >
   <IoAdd size={16} />
@@ -133,7 +133,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
       )}
 
       {/* View Modal */}
-      <Modal isOpen={isViewModalOpen} onClose={() => { setIsViewModalOpen(false); setEditingField(null); }} title={<h2 className="text-lg font-semibold text-purple-700">Store Details</h2>} size="xl">
+      <Modal isOpen={isViewModalOpen} onClose={() => { setIsViewModalOpen(false); setEditingField(null); }} title={<h2 className="text-lg font-semibold text-[var(--primary)]">Store Details</h2>} size="xl">
         {selectedStore && (
           <div className="space-y-6 max-h-[70vh] overflow-y-auto px-1">
             {[{
@@ -169,8 +169,8 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
               ]
             }].map((section, idx) => (
               <div key={idx} className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-md">
-                <div className="bg-purple-100 dark:bg-purple-800 px-4 py-2 rounded-t-lg flex justify-between items-center">
-                  <h3 className="text-md font-semibold text-purple-700 dark:text-white">{section.title}</h3>
+                <div className="bg-purple-100  px-4 py-2 rounded-t-lg flex justify-between items-center">
+                  <h3 className="text-md font-semibold text-[var(--primary)] dark:text-white">{section.title}</h3>
                 </div>
                 <table className="w-full text-sm">
                   <tbody>
@@ -208,7 +208,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
                                 setEditingField(field);
                                 setEditValue(typeof value === "string" ? value : "");
                               }}
-                              className="text-yellow-600 hover:text-yellow-800"
+                              className="text-[var(--secondary)] hover:text-gray-800"
                             >
                               <FaEdit size={14} />
                             </button>
@@ -255,8 +255,8 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
   onClose={() => setIsCredentialsModalOpen(false)}
   title={
     <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
-      <FaEdit className="text-blue-600 dark:text-blue-400" />
-      <h2 className="text-lg font-semibold">Add Store Credentials</h2>
+      
+      <h2 className="text-lg font-semibold text-[var(--primary)]">Add Store Credentials</h2>
     </div>
   }
 >
@@ -354,7 +354,7 @@ const [credentials, setCredentials] = useState({ username: "", password: "" });
           setStoreData(updated);
           setIsCredentialsModalOpen(false);
         }}
-        className="px-5 py-2 rounded-md bg-[var(--secondary)]  hover:bg-[var(--primary)] text-white hover:from-blue-700 hover:to-blue-600 transition shadow-md hover:shadow-lg"
+        className="px-5 py-2 rounded-md bg-[var(--primary)]  hover:bg-[var(--third)] text-white hover:from-blue-700 hover:to-blue-600 transition shadow-md hover:shadow-lg"
       >
         Save Credentials
       </button>

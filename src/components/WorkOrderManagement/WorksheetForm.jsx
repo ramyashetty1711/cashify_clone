@@ -93,8 +93,8 @@ export default function DynamicDeviceForm() {
   };
 
   return (
-    <div className="p-6 max-h-[45vh] overflow-y-auto custom-scrollbar">
-      <div ref={printRef} className="space-y-10 bg-white p-6 rounded">
+    <div className="space-y-6 p-6 bg-white  rounded  h-[calc(100vh-300px)] overflow-y-auto custom-scrollbar">
+      <div ref={printRef} className="">
         <form onSubmit={handleSubmit}>
           {/* Customer Section */}
           <section className="space-y-4">
@@ -113,7 +113,7 @@ export default function DynamicDeviceForm() {
                 { name: "pincode", label: "Pincode *", required: true },
               ].map(({ name, label, type = "text", required }) => (
                 <div key={name}>
-                  <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor={name} className="block text-sm font-medium text-black mb-1">
                     {label}
                   </label>
                   <input
@@ -123,7 +123,7 @@ export default function DynamicDeviceForm() {
                     value={formData[name] || ""}
                     onChange={handleChange}
                     required={required}
-                    className="border p-2 w-full rounded border-gray-300 text-black"
+                    className="border p-2 w-full rounded border-[var(--secondary)] text-black"
                   />
                 </div>
               ))}
@@ -135,7 +135,7 @@ export default function DynamicDeviceForm() {
             <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">Handset Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
               <div>
-                <label htmlFor="imei" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="imei" className="block text-sm font-medium text-black mb-1">
                   IMEI *
                 </label>
                 <input
@@ -143,14 +143,14 @@ export default function DynamicDeviceForm() {
                   name="imei"
                   value={formData.imei || ""}
                   onChange={handleChange}
-                  className="border p-2 w-full rounded border-gray-300 text-black"
+                  className="border p-2 w-full rounded border-[var(--secondary)] text-black"
                   required
                 />
               </div>
               <button
                 type="button"
                 onClick={fetchDeviceInfo}
-                className="bg-[var(--secondary)] text-white px-2  py-2 rounded hover:bg-[var(--primary)] h-fit self-end"
+                className="bg-[var(--primary)] text-white px-2  py-2 rounded hover:bg-[var(--primary)] h-fit self-end"
               >
                 Fetch
               </button>
@@ -160,7 +160,7 @@ export default function DynamicDeviceForm() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {DeviceFields.map((field) => (
                 <div key={field.key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-black mb-1">
                     {field.display}
                   </label>
                   <input
@@ -168,7 +168,7 @@ export default function DynamicDeviceForm() {
                     name={field.key}
                     value={formData[field.key] || ""}
                     readOnly
-                    className="border p-2 w-full  rounded border border-gray-300 bg-gray-100 text-black cursor-not-allowed"
+                    className="border p-2 w-full  rounded border border-[var(--secondary)] bg-gray-100 text-black cursor-not-allowed"
                   />
                 </div>
               ))}
@@ -179,7 +179,7 @@ export default function DynamicDeviceForm() {
           <section className="space-y-4 mt-5">
             <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">Issue Information</h3>
             <div>
-              <label htmlFor="issue_title" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="issue_title" className="block text-sm font-medium text-black mb-1">
                 Issue Title *
               </label>
               <input
@@ -187,12 +187,12 @@ export default function DynamicDeviceForm() {
                 name="issue_title"
                 value={formData.issue_title || ""}
                 onChange={handleChange}
-                className="border p-2 w-full rounded border-gray-300 text-black "
+                className="border p-2 w-full rounded border-[var(--secondary)] text-black "
                 required
               />
             </div>
             <div>
-              <label htmlFor="issue_details" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="issue_details" className="block text-sm font-medium text-black mb-1">
                 Issue Details *
               </label>
               <textarea
@@ -201,7 +201,7 @@ export default function DynamicDeviceForm() {
                 rows={4}
                 value={formData.issue_details || ""}
                 onChange={handleChange}
-                className="border p-2 w-full rounded border-gray-300 text-black"
+                className="border p-2 w-full rounded border-[var(--secondary)] text-black"
                 required
               ></textarea>
             </div>
@@ -217,7 +217,7 @@ export default function DynamicDeviceForm() {
             console.log("Saved Data:", formData);
             alert("Form data saved (not submitted). Check console.");
           }}
-          className="bg-gray-500 text-white px-6 py-2 rounded shadow-md"
+          className="bg-[var(--secondary)] text-white px-6 py-2 rounded shadow-md"
         >
           Save
         </button>
@@ -232,7 +232,7 @@ export default function DynamicDeviceForm() {
         <button
           type="button"
           onClick={handleDownloadPDF}
-          className="bg-purple-600 text-white px-6 py-2 rounded shadow-md"
+          className="bg-[var(--primary)] text-white px-6 py-2 rounded shadow-md"
         >
           Download PDF
         </button>

@@ -40,7 +40,7 @@ const Modal = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center border-b p-4">
+        <div className="flex justify-between items-center border-b py-2 px-4">
           {title}
           <button
             onClick={onClose}

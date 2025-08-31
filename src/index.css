@@ -5,8 +5,9 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  --primary: #4900a8;
-  --secondary: #7c57fc;
+  --primary: #694F8E;
+  --secondary:#676767;
+  --third: #7d6998;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -36,7 +37,7 @@ h1 {
 
 button {
   border-radius: 8px;
-  padding: 0.6em 0.6em;
+  padding: 0.5em 0.5em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -44,7 +45,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+
 }
 .dark button {
 
@@ -53,7 +54,7 @@ button:hover {
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
 }
 
 @media (prefers-color-scheme: light) {

@@ -19,7 +19,7 @@ function JobFormWrap() {
   };
 
   return (
-    <Box sx={{ p: 4, mx: 'auto' }}>
+    <Box sx={{ p: 1, mx: 'auto' }}>
       {/* Stepper Progress Bar */}
       <Stepper activeStep={step - 1} alternativeLabel>
   {steps.map((label, index) => (

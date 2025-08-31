@@ -6,6 +6,7 @@ import { CiFilter } from "react-icons/ci";
 import DynamicDeviceForm from "./WorksheetForm";
 import Select from "react-select";
 import JobFormWrap from "./JobFormWrap";
+import { Tab } from "@headlessui/react";
 
 
 export default function WorkOrderManagement() {
@@ -90,7 +91,7 @@ const [editValue, setEditValue] = useState("");
           {showTable && (
             <button
               onClick={() => setIsFilterModalOpen(true)}
-              className="bg-[var(--secondary)] text-white px-4 py-2 rounded hover:bg-[var(--primary)]"
+              className="bg-[var(--primary)] text-white px-4 py-2 rounded hover:bg-[var(--third)]"
               title="Filter"
             >
               <CiFilter className="text-[20px] " />
@@ -99,16 +100,16 @@ const [editValue, setEditValue] = useState("");
           <button
             onClick={() => setShowTable((prev) => !prev)}
             className={`flex items-center gap-2 px-4 py-2 rounded shadow text-white ${
-              showTable ? "bg-[var(--secondary)] hover:bg-[var(--primary)]" : "bg-red-600 hover:bg-red-700"
+              showTable ? "bg-[var(--primary)] hover:bg-[var(--third)]" : "bg-red-600 hover:bg-red-700"
             }`}
           >
-            {showTable ? <><FaPlus /> Add</> : "Close"}
+            {showTable ? <>Add</> : "Close"}
           </button>
         </div>
       </div>
 
       {showTable ? (
-        <div className="overflow-x-auto max-h-[68vh] custom-scrollbar">
+        <div className="overflow-x-auto h-[calc(100vh-200px)] custom-scrollbar">
           <table className="min-w-full table-auto border-collapse border border-gray-200 shadow-md rounded-lg text-sm md:text-base">
   <thead className="bg-purple-100 dark:bg-[var(--primary)] text-[var(--primary)] dark:text-gray-200 sticky top-0 z-10">
     <tr>
@@ -130,7 +131,7 @@ const [editValue, setEditValue] = useState("");
         <td className="px-6 py-3 text-left">{formatDateTime(val.receiving_time)}</td>
         <td className="px-6 py-3 flex gap-2">
           <button
-            className="p-2 rounded-full bg-purple-100 text-[var(--primary)] dark:bg-[var(--primary)] dark:text-white border border-purple-400 hover:bg-[var(--secondary)] hover:text-white"
+            className="p-2 rounded-full bg-purple-100 text-[var(--primary)]  dark:text-white border border-[var(--primary)] hover:bg-[var(--primary)] hover:text-white"
             onClick={() => {
               setSelectedWorkOrder(val);
               setIsViewModalOpen(true);
@@ -161,121 +162,214 @@ const [editValue, setEditValue] = useState("");
     setIsViewModalOpen(false);
     setEditingField(null);
   }}
-  title={<h2 className="text-lg font-semibold text-[var(--primary)]">Work Order Details</h2>}
-  size="xl"
+  title={<h2 className="text-lg font-semibold text-[var(--primary)] ">Work Order Details</h2>}
+  size="4xl"
 >
   {selectedWorkOrder && (
-    <div className="space-y-6 max-h-[70vh] overflow-y-auto px-1">
-      {[
-        {
-          title: "Job Info",
-          rows: [
-            ["Job Sheet Number", selectedWorkOrder.job_sheet_no, "job_sheet_no", "text"],
-            ["Category of Job Sheet", selectedWorkOrder.category_of_jobsheet, "category_of_jobsheet", "text"],
-            ["Submission Category", selectedWorkOrder.submission_category, "submission_category", "select", ["Walk-In", "Pickup", "Courier"]],
-            ["Repair Category", selectedWorkOrder.repair_category, "repair_category", "select", ["Software", "Hardware", "Replacement"]],
-            ["Status", selectedWorkOrder.status, "status", "select", ["Received", "In Progress", "Completed", "Delivered", "Closed"]],
-            ["RVS Status", selectedWorkOrder.rvs_status, "rvs_status", "text"],
-          ],
-        },
-        {
-          title: "Customer Info",
-          rows: [
-            ["Phone Number", selectedWorkOrder.phone_number, "phone_number", "text"],
-            ["IMEI Number", selectedWorkOrder.imei_number, "imei_number", "text"],
-          ],
-        },
-        {
-          title: "Additional Info",
-          rows: [
-            ["Receiving Time", formatDateTime(selectedWorkOrder.receiving_time), "receiving_time", "text"],
-            ["Invoice Number", selectedWorkOrder.invoice_no, "invoice_no", "text"],
-            ["Handle Method", selectedWorkOrder.handle_method, "handle_method", "text"],
-            ["Source of Creation", selectedWorkOrder.source_of_creation, "source_of_creation", "text"],
-          ],
-        },
-      ].map((section, idx) => (
-        <div
-          key={idx}
-          className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-md"
-        >
-          <div className="bg-purple-100 dark:bg-[var(--primary)] px-4 py-2 rounded-t-lg flex justify-between items-center">
-            <h3 className="text-md font-semibold text-[var(--primary)] dark:text-white">{section.title}</h3>
-          </div>
-          <table className="w-full text-sm">
-            <tbody>
-              {section.rows.map(([label, value, field, type, options = []], i) => (
-                <tr
-                  key={i}
-                  className={
-                    i % 2 === 0
-                      ? "bg-gray-50 dark:bg-gray-800"
-                      : "bg-white dark:bg-gray-900"
-                  }
-                >
-                  <td className="py-2 px-4 font-medium text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700 w-1/3">
-                    {label}
-                  </td>
-                  <td className="py-2 px-4 text-gray-800 dark:text-gray-100 border-t border-gray-200 dark:border-gray-700">
-                    {editingField === field ? (
-                      type === "select" ? (
-                        <Select
-                          className="text-black"
-                          defaultValue={{ label: selectedWorkOrder[field], value: selectedWorkOrder[field] }}
-                          options={options.map((opt) => ({
-                            label: opt,
-                            value: opt,
-                          }))}
-                          onChange={(selected) => setEditValue(selected.value)}
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          className="w-full px-2 py-1 border border-gray-300 rounded text-black"
-                        />
-                      )
+    <div className="w-full space-y-6 max-h-[75vh] overflow-y-auto">
+      {/* ✅ Job Info (always visible, common section) */}
+      <div className="bg-white dark:bg-gray-900 border rounded-lg shadow-md">
+        <h3 className="px-4 py-2 font-semibold text-[var(--primary)] border-b dark:border-gray-700">
+          Job Info
+        </h3>
+        <table className="w-full text-sm text-gray-700 dark:text-gray-300">
+          <tbody>
+            {[
+              ["Job Sheet Number", selectedWorkOrder.job_sheet_no, "job_sheet_no", "text"],
+              ["Category of Job Sheet", selectedWorkOrder.category_of_jobsheet, "category_of_jobsheet", "text"],
+              ["Submission Category", selectedWorkOrder.submission_category, "submission_category", "select", ["Walk-In", "Pickup", "Courier"]],
+              ["Repair Category", selectedWorkOrder.repair_category, "repair_category", "select", ["Software", "Hardware", "Replacement"]],
+              ["Status", selectedWorkOrder.status, "status", "select", ["Received", "In Progress", "Completed", "Delivered", "Closed"]],
+              ["RVS Status", selectedWorkOrder.rvs_status, "rvs_status", "text"],
+            ].map(([label, value, field, type, options = []], i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-gray-50 dark:bg-gray-800" : ""}>
+                <td className="px-4 py-2 font-medium">{label}</td>
+                <td className="px-4 py-2">
+                  {editingField === field ? (
+                    type === "select" ? (
+                      <Select
+                        className="text-black"
+                        defaultValue={{ label: value, value }}
+                        options={options.map((opt) => ({ label: opt, value: opt }))}
+                        onChange={(selected) => setEditValue(selected.value)}
+                      />
                     ) : (
-                      value || "Not Available"
-                    )}
-                  </td>
-                  <td className="py-2 px-4 text-right border-t border-gray-200 dark:border-gray-700 w-10">
-                    {editingField === field ? (
-                      <button
-                        onClick={() => {
-                          const updated = { ...selectedWorkOrder, [field]: editValue };
-                          setSelectedWorkOrder(updated);
-                          setEditingField(null);
-                        }}
-                        className="text-green-600 hover:text-green-800 font-semibold text-sm"
-                      >
-                        Save
-                      </button>
-                    ) : (
-                      <button
-                        title={`Edit ${label}`}
-                        onClick={() => {
-                          setEditingField(field);
-                          setEditValue(
-                            typeof value === "string" ? value : ""
-                          );
-                        }}
-                        className="text-yellow-600 hover:text-yellow-800"
-                      >
-                        <FaEdit size={14} />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+                      <input
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        className="w-full px-2 py-1 border rounded text-black"
+                      />
+                    )
+                  ) : (
+                    value || "Not Available"
+                  )}
+                </td>
+                <td className="px-4 py-2 text-right">
+                  {editingField === field ? (
+                    <button
+                      onClick={() => {
+                        const updated = { ...selectedWorkOrder, [field]: editValue };
+                        setSelectedWorkOrder(updated);
+                        setEditingField(null);
+                      }}
+                      className="text-green-600 font-semibold"
+                    >
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setEditingField(field);
+                        setEditValue(typeof value === "string" ? value : "");
+                      }}
+                      className="text-[var(--secndary)] hover:text-gray-800"
+                    >
+                      <FaEdit size={14} />
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ✅ Tabs for Customer Info & Additional Info */}
+      <Tab.Group>
+        <Tab.List className="flex space-x-2 border-b border-gray-300 dark:border-gray-700 mb-4">
+          {["Receiving information", "Repair information", "Handover information", "RVS information", "Operation record"].map((tab, idx) => (
+            <Tab
+              key={idx}
+              className={({ selected }) =>
+                `px-4 py-2 rounded-t-lg font-medium ${
+                  selected
+                    ? "bg-[var(--primary)] text-white"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                }`
+              }
+            >
+              {tab}
+            </Tab>
+          ))}
+        </Tab.List>
+
+        <Tab.Panels>
+          {/* CUSTOMER INFO */}
+          <Tab.Panel>
+            <div className="bg-white dark:bg-gray-900 border rounded-lg shadow-md">
+              <table className="w-full text-sm text-gray-700 dark:text-gray-300">
+                <tbody>
+                  {[
+                    ["Phone Number", selectedWorkOrder.phone_number, "phone_number", "text"],
+                    ["IMEI Number", selectedWorkOrder.imei_number, "imei_number", "text"],
+                  ].map(([label, value, field, type], i) => (
+                    <tr key={i} className={i % 2 === 0 ? "bg-gray-50 dark:bg-gray-800" : ""}>
+                      <td className="px-4 py-2 font-medium">{label}</td>
+                      <td className="px-4 py-2">
+                        {editingField === field ? (
+                          <input
+                            type="text"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            className="w-full px-2 py-1 border rounded text-black"
+                          />
+                        ) : (
+                          value || "Not Available"
+                        )}
+                      </td>
+                      <td className="px-4 py-2 text-right">
+                        {editingField === field ? (
+                          <button
+                            onClick={() => {
+                              const updated = { ...selectedWorkOrder, [field]: editValue };
+                              setSelectedWorkOrder(updated);
+                              setEditingField(null);
+                            }}
+                            className="text-green-600 font-semibold"
+                          >
+                            Save
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEditingField(field);
+                              setEditValue(value || "");
+                            }}
+                            className="text-[var(--secondary)] hover:text-gray-800"
+                          >
+                            <FaEdit size={14} />
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Tab.Panel>
+
+          {/* ADDITIONAL INFO */}
+          <Tab.Panel>
+            <div className="bg-white dark:bg-gray-900 border rounded-lg shadow-md">
+              <table className="w-full text-sm text-gray-700 dark:text-gray-300">
+                <tbody>
+                  {[
+                    ["Receiving Time", formatDateTime(selectedWorkOrder.receiving_time), "receiving_time", "text"],
+                    ["Invoice Number", selectedWorkOrder.invoice_no, "invoice_no", "text"],
+                    ["Handle Method", selectedWorkOrder.handle_method, "handle_method", "text"],
+                    ["Source of Creation", selectedWorkOrder.source_of_creation, "source_of_creation", "text"],
+                  ].map(([label, value, field, type], i) => (
+                    <tr key={i} className={i % 2 === 0 ? "bg-gray-50 dark:bg-gray-800" : ""}>
+                      <td className="px-4 py-2 font-medium">{label}</td>
+                      <td className="px-4 py-2">
+                        {editingField === field ? (
+                          <input
+                            type="text"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            className="w-full px-2 py-1 border rounded text-black"
+                          />
+                        ) : (
+                          value || "Not Available"
+                        )}
+                      </td>
+                      <td className="px-4 py-2 text-right">
+                        {editingField === field ? (
+                          <button
+                            onClick={() => {
+                              const updated = { ...selectedWorkOrder, [field]: editValue };
+                              setSelectedWorkOrder(updated);
+                              setEditingField(null);
+                            }}
+                            className="text-green-600 font-semibold"
+                          >
+                            Save
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEditingField(field);
+                              setEditValue(value || "");
+                            }}
+                            className="text-[var(--secondary)] hover:text-gray-800"
+                          >
+                            <FaEdit size={14} />
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Tab.Panel>
+        </Tab.Panels>
+      </Tab.Group>
     </div>
   )}
 </Modal>
+
 
 
      
@@ -364,7 +458,7 @@ const [editValue, setEditValue] = useState("");
               handleSearch();
               setIsFilterModalOpen(false);
             }}
-            className="bg-[var(--secondary)] text-white px-4 py-2 rounded hover:bg-[var(--primary)]"
+            className="bg-[var(--primary)] text-white px-4 py-2 rounded hover:bg-[var(--primary)]"
           >
             Search
           </button>
@@ -373,7 +467,7 @@ const [editValue, setEditValue] = useState("");
               handleReset();
               setIsFilterModalOpen(false);
             }}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            className="bg-[var(--secondary)] text-white px-4 py-2 rounded hover:bg-gray-600"
           >
             Reset
           </button>

@@ -27,7 +27,7 @@ const Navbar = () => {
       <div className="h-[70px] py-3 px-4 bg-white dark:bg-[#383838] flex justify-between items-center shadow z-10">
         {/* Logo */}
         <Link to={"/home"} className="flex items-center bg-gradient-to-r from-purple-200 to-purple-50 rounded-lg p-1">
-          <img src={Logo} width={90} alt="Logo" />
+          <img src={Logo} width={130} alt="Logo" />
         </Link>
 
         {/* Desktop Menu */}
@@ -39,8 +39,8 @@ const Navbar = () => {
                   to={menu.link}
                   className={`px-3 py-2 rounded-md font-semibold transition duration-200 ${
                     Location.pathname.includes(menu.link)
-                      ? "text-purple-600 dark:text-purple-300 underline"
-                      : "text-gray-600 dark:text-white hover:text-purple-700"
+                      ? "text-[var(--primary)]  underline"
+                      : "text-gray-600 dark:text-white hover:text-[var(--secondary)]"
                   }`}
                 >
                   {menu.display}
@@ -91,12 +91,12 @@ const Navbar = () => {
       {/* Main Layout */}
       <div className="flex-grow grid lg:grid-cols-5 h-[calc(100vh-70px)] overflow-hidden">
         {/* Main content */}
-        <div className="lg:col-span-4 bg-gray-100 dark:bg-[#2f2f2f] overflow-y-auto p-4">
+        <div className="lg:col-span-4 bg-gray-100  overflow-y-hidden p-4">
           <Outlet />
         </div>
 
         {/* Optional Side Profile */}
-        <div className="hidden lg:block lg:col-span-1 bg-gray-100 dark:bg-[#383838] overflow-y-auto p-4">
+        <div className="hidden lg:block lg:col-span-1 bg-gray-100  overflow-y-auto p-4">
           <SideBarProfile />
         </div>
       </div>

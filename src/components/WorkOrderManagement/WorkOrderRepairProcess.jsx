@@ -60,12 +60,12 @@ export default function WorkOrderRepairProcess() {
   };
 
   return (
-    <div className="max-h-[45vh] overflow-y-auto custom-scrollbar px-6 py-4 bg-white dark:bg-gray-900 rounded space-y-6">
+    <div className="space-y-6 p-6 bg-white rounded h-[calc(100vh-300px)] overflow-y-auto custom-scrollbar">
       {/* Job Sheet Info */}
-      <section>
-        <h2 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">
+      <section className="space-y-4">
+        <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">
           Job Sheet Information
-        </h2>
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField label="Job Sheet Number" />
           <DisplayField label="Problem Title" value="Battery not charging" />
@@ -78,10 +78,10 @@ export default function WorkOrderRepairProcess() {
       </section>
 
       {/* Diagnose Info */}
-      <section>
-        <h2 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">
+      <section className="space-y-4 mt-5">
+        <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">
           Engineer Diagnose Info
-        </h2>
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectField
             label="Resolution Method"
@@ -105,56 +105,55 @@ export default function WorkOrderRepairProcess() {
       </section>
 
       {/* Parts Replacement */}
-      <section>
-        <h2 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">
+      <section className="space-y-4 mt-5">
+        <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">
           Parts Replacement Info
-        </h2>
+        </h3>
         {parts.map((partEntry, index) => (
           <div
             key={index}
-            className="p-4 mb-6 bg-gray-50 dark:bg-gray-800 rounded-lg border shadow-sm"
+            className="p-4 mb-6 bg-gray-50 rounded border shadow-sm"
           >
             <div className="flex items-end gap-3 mb-4">
               <div className="flex-grow">
-                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                <label className="block text-sm font-medium text-[var(--secondary)] mb-1">
                   Part ID
                 </label>
-                <div className="relative flex">
+                <div className="flex gap-2">
                   <input
                     type="text"
                     placeholder="e.g. P001"
-                    className="w-full px-3 py-2 border rounded-l text-sm text-gray-800 dark:text-white dark:bg-gray-700"
+                    className="border p-2 w-full rounded text-black"
                     value={partEntry.partId}
-                    onChange={(e) =>
-                      handlePartIdChange(index, e.target.value)
-                    }
+                    onChange={(e) => handlePartIdChange(index, e.target.value)}
                   />
+                  {/* Uniform Buttons */}
                   <button
                     type="button"
                     onClick={() => fetchPartDetails(index)}
-                    className="bg-blue-600 ml-2 hover:bg-blue-700 text-white px-3 rounded-r"
+                    className="bg-[var(--secondary)] hover:bg-[var(--primary)] text-white flex items-center justify-center w-10 h-10 rounded"
                     title="Fetch Part Details"
                   >
                     <FaSearch />
                   </button>
+                  {parts.length > 1 && (
+                    <button
+                      onClick={() => removePartField(index)}
+                      className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-center w-10 h-10 rounded"
+                    >
+                      <FaMinus />
+                    </button>
+                  )}
+                  {index === parts.length - 1 && (
+                    <button
+                      onClick={addPartField}
+                      className="bg-green-600 hover:bg-green-700 text-white flex items-center justify-center w-10 h-10 rounded"
+                    >
+                      <FaPlus />
+                    </button>
+                  )}
                 </div>
               </div>
-              {parts.length > 1 && (
-                <button
-                  onClick={() => removePartField(index)}
-                  className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
-                >
-                  <FaMinus />
-                </button>
-              )}
-              {index === parts.length - 1 && (
-                <button
-                  onClick={addPartField}
-                  className="bg-green-500 hover:bg-green-600 text-white p-2 rounded"
-                >
-                  <FaPlus />
-                </button>
-              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -167,7 +166,7 @@ export default function WorkOrderRepairProcess() {
                 "cost",
               ].map((field) => (
                 <div key={field}>
-                  <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1 capitalize">
+                  <label className="block text-sm font-medium text-[var(--secondary)] mb-1 capitalize">
                     {field.replace(/([A-Z])/g, " $1")}
                   </label>
                   <input
@@ -182,7 +181,7 @@ export default function WorkOrderRepairProcess() {
                       setParts(updated);
                     }}
                     placeholder={`Enter ${field}`}
-                    className="w-full px-3 py-2 border rounded text-sm text-gray-800 dark:text-white dark:bg-gray-700"
+                    className="border p-2 w-full rounded text-black"
                   />
                 </div>
               ))}
@@ -192,28 +191,29 @@ export default function WorkOrderRepairProcess() {
       </section>
 
       {/* Final Remarks */}
-      <section>
-        <h2 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">
+      <section className="space-y-4 mt-5">
+        <h3 className="text-xl font-bold text-[var(--primary)] border-b pb-2">
           Final Remarks
-        </h2>
+        </h3>
         <textarea
           rows="4"
           placeholder="Enter any final remarks"
-          className="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 dark:text-gray-200 focus:outline-none"
+          className="border p-2 w-full rounded border-[var(--secondary)] text-black"
         />
       </section>
 
-      <div className="flex justify-end gap-4">
+      {/* Buttons */}
+      <div className="flex justify-end gap-4 mt-6">
         <button
           type="button"
-          className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded"
+          className="bg-[var(--secondary)] text-white px-6 py-2 rounded shadow-md"
           onClick={() => alert("Saved successfully!")}
         >
           Save
         </button>
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+          className="bg-green-600 text-white px-6 py-2 rounded shadow-md"
         >
           Submit
         </button>
@@ -226,13 +226,13 @@ export default function WorkOrderRepairProcess() {
 function InputField({ label, type = "text" }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+      <label className="block text-sm font-medium text-[var(--secondary)] mb-1">
         {label}
       </label>
       <input
         type={type}
         placeholder={label}
-        className="w-full border border-gray-300 rounded px-3 py-2 text-gray-700 dark:text-gray-200"
+        className="border p-2 w-full rounded border-[var(--secondary)] text-black"
       />
     </div>
   );
@@ -241,11 +241,11 @@ function InputField({ label, type = "text" }) {
 function DisplayField({ label, value, multiline = false }) {
   return (
     <div className={multiline ? "md:col-span-2" : ""}>
-      <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+      <label className="block text-sm font-medium text-[var(--secondary)] mb-1">
         {label}
       </label>
       <div
-        className={`w-full border border-gray-300 rounded px-3 py-2 text-gray-700 dark:text-gray-200 ${
+        className={`border p-2 w-full rounded border-[var(--secondary)] text-black bg-gray-100 ${
           multiline ? "min-h-[6rem]" : ""
         }`}
       >
@@ -262,7 +262,7 @@ function SelectField({ label, options, selected, setSelected }) {
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+      <label className="block text-sm font-medium text-[var(--secondary)] mb-1">
         {label}
       </label>
       <Select
@@ -270,13 +270,13 @@ function SelectField({ label, options, selected, setSelected }) {
         value={selected}
         onChange={setSelected}
         placeholder={`Select ${label}`}
-        className="text-black dark:text-white"
+        className="text-black"
         classNamePrefix="react-select"
         styles={{
           control: (base) => ({
             ...base,
-            backgroundColor: "white",
-            borderColor: "#ccc",
+            borderColor: "#d1d5db",
+            borderRadius: "0.375rem",
             padding: "2px",
           }),
           menu: (base) => ({
