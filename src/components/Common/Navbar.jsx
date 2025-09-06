@@ -1,105 +1,131 @@
-import React, { useState } from "react";
-import { TiArrowSortedDown } from "react-icons/ti";
+import React, { useState, useEffect } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
-import Logo from "../../assets/Logo.png";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import ProfilePopover from "./ProfilePopover";
-import SideBarProfile from "./SideBarProfile";
+import Footer from "../../assets/Components/Footer/Footer";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const Location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   const MenuData = [
-    { display: "Home", link: "/home" },
-    { display: "SC Management", link: "/sc-management" },
-    { display: "Work Order Management", link: "/workorder" },
-    // { display: "Artice Management", link: "/artice-management" },
-    // { display: "Basic Data", link: "/basic-data" },
-    { display: "Report Management", link: "/report-management" },
-    { display: "Admin Tools", link: "/admin-tools" },
+    { display: "Home", link: "/" },
+    { display: "Sell Phone", link: "/sell-phone" },
+    { display: "Support", link: "/support" },
   ];
 
+  const isActive = (link) =>
+    link === "/" ? location.pathname === "/" : location.pathname.startsWith(link);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="h-screen flex flex-col">
-      {/* Top Navbar */}
-      <div className="h-[70px] py-3 px-4 bg-white dark:bg-[#383838] flex justify-between items-center shadow z-10">
+    <div className="flex flex-col min-h-screen">
+      {/* Navbar */}
+      <header
+        className={`sticky top-0 z-50 flex items-center justify-between px-6 lg:px-8 py-3 transition-all duration-300 backdrop-blur-xl bg-white/50 dark:bg-gray-900/30 ${
+          scrolled ? "shadow-md" : ""
+        }`}
+      >
         {/* Logo */}
-        <Link to={"/home"} className="flex items-center bg-gradient-to-r from-purple-200 to-purple-50 rounded-lg p-1">
-          <img src={Logo} width={130} alt="Logo" />
+        <Link
+          to="/"
+          className="text-xl font-extrabold bg-gradient-to-r from-[var(--primary)] to-[var(--third)] text-transparent bg-clip-text hover:scale-105 transition-transform"
+        >
+          Logo
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex gap-4 items-center">
-          <ul className="flex gap-3">
-            {MenuData.map((menu, index) => (
-              <li key={index}>
-                <Link
-                  to={menu.link}
-                  className={`px-3 py-2 rounded-md font-semibold transition duration-200 ${
-                    Location.pathname.includes(menu.link)
-                      ? "text-[var(--primary)]  underline"
-                      : "text-gray-600 dark:text-white hover:text-[var(--secondary)]"
-                  }`}
-                >
-                  {menu.display}
-                  {menu.children && (
-                    <TiArrowSortedDown className="ml-1 inline-block" size={16} />
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Center Menu */}
+        <nav className="hidden lg:flex gap-6 absolute left-1/2 transform -translate-x-1/2">
+          {MenuData.map((menu, idx) => (
+            <Link
+              key={idx}
+              to={menu.link}
+              className={`relative text-base font-medium transition-colors duration-200 ${
+                isActive(menu.link)
+                  ? "text-[var(--primary)]"
+                  : "text-[var(--secondary)] hover:text-[var(--primary)]"
+              }`}
+            >
+              {menu.display}
+            </Link>
+          ))}
+        </nav>
 
-        {/* Right: Profile + Mobile Menu */}
-        <div className="flex items-center gap-4">
-          <ProfilePopover />
+        {/* Login + Mobile Menu Toggle */}
+        <div className="flex items-center gap-3">
+          <Link
+            to="/login"
+            className="hidden lg:block px-4 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-white hover:bg-[var(--third)] transition-all text-sm"
+          >
+            Login
+          </Link>
+
           <button
-            className="lg:hidden text-2xl text-purple-700 dark:text-white"
+            className="lg:hidden text-2xl text-[var(--primary)] hover:scale-110 transition-transform"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <RxCross2 /> : <GiHamburgerMenu />}
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white dark:bg-[#383838] px-4 py-4 shadow z-20">
-          <ul className="flex flex-col gap-3">
-            {MenuData.map((menu, index) => (
-              <li key={index}>
-                <Link
-                  to={menu.link}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md font-medium ${
-                    Location.pathname.includes(menu.link)
-                      ? "text-purple-700 dark:text-purple-300"
-                      : "text-gray-800 dark:text-white hover:bg-purple-100 dark:hover:bg-gray-700"
-                  }`}
-                >
-                  {menu.display}
-                </Link>
-              </li>
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end">
+          <div className="w-2/3 max-w-sm bg-white dark:bg-gray-900 p-6 shadow-lg rounded-l-2xl flex flex-col gap-4 animate-slide-right">
+            {MenuData.map((menu, idx) => (
+              <Link
+                key={idx}
+                to={menu.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg font-medium text-[var(--secondary)] hover:bg-[var(--primary)] hover:text-white transition"
+              >
+                {menu.display}
+              </Link>
             ))}
-          </ul>
+            <Link
+  to="/login"
+  className="hidden lg:block px-5 py-2 rounded-full font-semibold bg-gradient-to-r from-[var(--primary)] to-[var(--third)] text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm"
+>
+  Login
+</Link>
+
+          </div>
         </div>
       )}
 
-      {/* Main Layout */}
-      <div className="flex-grow grid lg:grid-cols-5 h-[calc(100vh-70px)] overflow-hidden">
-        {/* Main content */}
-        <div className="lg:col-span-4 bg-gray-100  overflow-y-hidden p-4">
-          <Outlet />
-        </div>
+      {/* Main Outlet */}
+      <main className="flex-grow bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <Outlet />
+      </main>
 
-        {/* Optional Side Profile */}
-        <div className="hidden lg:block lg:col-span-1 bg-gray-100  overflow-y-auto p-4">
-          <SideBarProfile />
-        </div>
-      </div>
+      {/* Footer */}
+      <footer className="bg-white/80 dark:bg-gray-900/80 text-[var(--secondary)] dark:text-gray-300 text-center shadow-inner text-sm">
+        <Footer />
+      </footer>
+
+      {/* Animations */}
+      <style jsx>{`
+        @keyframes slideRight {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-right {
+          animation: slideRight 0.3s ease forwards;
+        }
+      `}</style>
     </div>
   );
 };

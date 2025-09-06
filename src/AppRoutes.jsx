@@ -1,39 +1,28 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home/Home";
-import Login from "./components/Login/Login";
 import Navbar from "./components/Common/Navbar";
-import WorkOrderManagement from "./components/WorkOrderManagement/WorkOrderManagement";
-import SCManagement from "./components/SCManagement/SCManagement";
-import ServiceManagement from "./components/ServiceManagement/ServiceManagement";
-import SparePartsMaanagement from "./components/SparePartsManagement.jsx/SparePartsMaanagement";
-import DeviceManagement from "./components/DeviceManagement/DeviceManagement";
-import ArticleManagement from "./components/ArticleManagement/ArticleManagement";
-import BasicData from "./components/BasicData/BasicData";
-import ReportManagement from "./components/ReportManagement/ReportManagement";
-import AdminTools from "./components/AdminTools/AdminTools";
+import Home from "./assets/Components/Home/Home";
+import AboutUs from "./assets/Components/AboutUs/AboutUs";
+import ContactUs from "./assets/Components/ContactUs/ContactUs";
+import Services from "./assets/Components/Services/Services";
 
 export default function AppRoutes() {
-  const AppRoutes = [
-    { path: "/home", component: <Home /> },
-    { path: "/workorder", component: <WorkOrderManagement /> },
-    { path: "/sc-management", component: <SCManagement /> },
-    { path: "/service-management", component: <ServiceManagement /> },
-    { path: "/spare-parts-management", component: <SparePartsMaanagement /> },
-    { path: "/device-management", component: <DeviceManagement /> },
-    { path: "/artice-management", component: <ArticleManagement /> },
-    { path: "/basic-data", component: <BasicData /> },
-    { path: "/report-management", component: <ReportManagement /> },
-    { path: "/admin-tools", component: <AdminTools /> },
-  ];
   return (
     <Router>
       <Routes>
-        <Route element={<Login />} path="/" />
-        <Route element={<Navbar />}>
-          {AppRoutes.map((item) => (
-            <Route path={item.path} element={item.component} />
-          ))}
+        {/* Layout route */}
+        <Route path="/" element={<Navbar />}>
+          {/* Default route */}
+          <Route index element={<Home />} /> 
+
+          {/* Other routes */}
+          <Route path="about-us" element={<AboutUs />} />
+          <Route path="contact-us" element={<ContactUs />} />
+          <Route path="services" element={<Services />} />
+
+          {/* Example: Nested routes under Navbar */}
+          {/* <Route path="workorder" element={<WorkOrderManagement />} /> */}
+          {/* <Route path="sc-management" element={<SCManagement />} /> */}
         </Route>
       </Routes>
     </Router>

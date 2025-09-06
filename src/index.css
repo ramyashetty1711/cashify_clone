@@ -5,9 +5,9 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  --primary: #694F8E;
-  --secondary:#676767;
-  --third: #7d6998;
+  --primary: #4F46E5;
+  --secondary:#64748B;
+  --third: #06B6D4;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
