@@ -3,10 +3,12 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross2 } from "react-icons/rx";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Footer from "../../assets/Components/Footer/Footer";
+import Select from "react-select";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [selectedCity, setSelectedCity] = useState(null);
   const location = useLocation();
 
   const MenuData = [
@@ -14,6 +16,32 @@ const Navbar = () => {
     { display: "Sell Phone", link: "/sell-phone" },
     { display: "Support", link: "/support" },
   ];
+
+  const cities = [
+    { value: "Bengaluru", label: "Bengaluru" },
+    { value: "Mumbai", label: "Mumbai" },
+    { value: "Delhi", label: "Delhi" },
+    { value: "Chennai", label: "Chennai" },
+    { value: "Kolkata", label: "Kolkata" },
+  ];
+
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      minHeight: "38px",
+      width: "150px",
+      fontSize: "0.875rem",
+      borderRadius: "8px",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: "var(--primary)",
+    }),
+  };
 
   const isActive = (link) =>
     link === "/" ? location.pathname === "/" : location.pathname.startsWith(link);
@@ -57,15 +85,28 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Login + Mobile Menu Toggle */}
+        {/* City Dropdown + Login + Mobile Menu Toggle */}
         <div className="flex items-center gap-3">
+          {/* City Dropdown */}
+          <Select
+            options={cities}
+            value={selectedCity}
+            onChange={setSelectedCity}
+            placeholder="Select City"
+            styles={customStyles}
+            isSearchable={false}
+            className="text-black"
+          />
+
+          {/* Login Button */}
           <Link
             to="/login"
-            className="hidden lg:block px-4 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-white hover:bg-[var(--third)] transition-all text-sm"
+            className="hidden lg:block px-4 py-2 rounded-lg font-medium bg-[var(--primary)] text-white hover:bg-[var(--third)] transition-all text-sm"
           >
-            Login
+            Login or Register
           </Link>
 
+          {/* Mobile Menu Toggle */}
           <button
             className="lg:hidden text-2xl text-[var(--primary)] hover:scale-110 transition-transform"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -90,12 +131,11 @@ const Navbar = () => {
               </Link>
             ))}
             <Link
-  to="/login"
-  className="hidden lg:block px-5 py-2 rounded-full font-semibold bg-gradient-to-r from-[var(--primary)] to-[var(--third)] text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm"
->
-  Login
-</Link>
-
+              to="/login"
+              className="px-5 py-5 rounded-full font-semibold bg-gradient-to-r from-[var(--primary)] to-[var(--third)] text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm"
+            >
+              Login/Register
+            </Link>
           </div>
         </div>
       )}

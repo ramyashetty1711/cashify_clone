@@ -27,7 +27,7 @@ const HeroSection = () => {
   return (
     <section className="relative overflow-hidden">
       {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary)]/50 via-[var(--third)]/30 to-[var(--primary)]/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary)]/60 via-[var(--third)]/40 to-[var(--primary)]/60"></div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center gap-12 py-16 lg:py-20">
         {/* Left Content */}
@@ -42,24 +42,22 @@ const HeroSection = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
             <button
-              onClick={() => navigate("/sell")}
+              onClick={() => navigate("/sell-phone")}
               className="bg-[var(--primary)] text-white font-semibold px-6 py-3 rounded-xl shadow-xl hover:shadow-2xl transition transform hover:scale-105"
             >
               Sell Now
             </button>
-            <button
-              className="border-2 border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white hover:text-[var(--primary)] transition transform hover:scale-105"
-            >
+            <button className="border-2 border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white hover:text-[var(--primary)] transition transform hover:scale-105">
               Learn More
             </button>
           </div>
 
-          {/* Feature Tabs */}
+          {/* Feature Cards */}
           <div className="mt-10 flex flex-col sm:flex-row gap-6">
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className="flex-1 flex flex-col items-start gap-3 p-6 rounded-3xl bg-gradient-to-r from-[var(--primary)]/20 to-[var(--third)]/20 shadow-lg hover:shadow-2xl transition transform hover:scale-105 cursor-pointer"
+                className="flex-1 flex flex-col items-start gap-3 p-6 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg hover:shadow-2xl transition transform hover:scale-101 cursor-pointer"
               >
                 <div className="p-4 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--third)] text-white shadow-md flex items-center justify-center">
                   {feature.icon}

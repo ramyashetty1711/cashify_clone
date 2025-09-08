@@ -1,38 +1,25 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaMobileAlt,
-  FaTabletAlt,
-  FaLaptop,
-  FaHeadphones,
-  FaCamera,
-  FaGamepad,
-} from "react-icons/fa";
+import { FaMobileAlt, FaMoneyBillWave, FaShieldAlt, FaBolt, FaStar, FaThumbsUp } from "react-icons/fa";
 
 const services = [
   { icon: <FaMobileAlt size={28} />, title: "Smartphones" },
-  { icon: <FaTabletAlt size={28} />, title: "Tablets" },
-  { icon: <FaLaptop size={28} />, title: "Laptops" },
-  { icon: <FaHeadphones size={28} />, title: "Accessories" },
-  { icon: <FaCamera size={28} />, title: "Cameras" },
-  { icon: <FaGamepad size={28} />, title: "Gaming Devices" },
+  { icon: <FaMoneyBillWave size={28} />, title: "Best Price Guaranteed" },
+  { icon: <FaShieldAlt size={28} />, title: "Safe & Secure" },
+  { icon: <FaBolt size={28} />, title: "Instant Valuation" },
+  { icon: <FaStar size={28} />, title: "Trusted by Users" },
+  { icon: <FaThumbsUp size={28} />, title: "Easy Process" },
 ];
 
 const FeaturedServices = () => {
   const [radius, setRadius] = useState(180);
 
-  // Adjust radius based on screen width (responsive)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setRadius(120); // Mobile
-      } else if (window.innerWidth < 1024) {
-        setRadius(180); // Tablet
-      } else {
-        setRadius(260); // Desktop
-      }
+      if (window.innerWidth < 640) setRadius(120);
+      else if (window.innerWidth < 1024) setRadius(180);
+      else setRadius(260);
     };
-
-    handleResize(); // run on mount
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -40,12 +27,11 @@ const FeaturedServices = () => {
   return (
     <section className="relative py-24 bg-gradient-to-br from-[var(--third)]/20 via-white to-[var(--third)]/10 ">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
-        {/* Heading */}
         <h2 className="text-4xl lg:text-5xl font-extrabold text-[var(--primary)] mb-6">
-          Our Services
+          Why Sell Your Phone With Us?
         </h2>
         <p className="text-lg text-[var(--secondary)] max-w-2xl mx-auto mb-16">
-          We cover a wide range of gadgets. Here’s what you can sell with us:
+          Get the best price instantly, safely, and easily. Check out the benefits:
         </p>
 
         {/* Circular Layout */}
@@ -59,7 +45,7 @@ const FeaturedServices = () => {
 
           {/* Services Positioned Around Circle */}
           {services.map((service, idx) => {
-            const angle = (idx / services.length) * (2 * Math.PI); // radians
+            const angle = (idx / services.length) * (2 * Math.PI);
             const x = radius * Math.cos(angle);
             const y = radius * Math.sin(angle);
 
@@ -76,9 +62,7 @@ const FeaturedServices = () => {
                 <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--third)] shadow-lg text-white mb-2">
                   {service.icon}
                 </div>
-                <p className="text-sm font-medium text-[var(--secondary)]">
-                  {service.title}
-                </p>
+                <p className="text-sm font-medium text-[var(--secondary)]">{service.title}</p>
               </div>
             );
           })}
