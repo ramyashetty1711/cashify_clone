@@ -87,7 +87,7 @@ function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="mt-12 border-t border-[var(--primary)] pt-6 text-center text-gray-500 text-sm">
+      <div className="mt-12 border-t border-[var(--primary)] py-3 text-center text-gray-500 text-sm">
         © 2025 Your Company. All rights reserved.
       </div>
     </footer>

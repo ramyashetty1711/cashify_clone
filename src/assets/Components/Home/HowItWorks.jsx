@@ -29,7 +29,7 @@ const HowItWorks = () => {
     <section className="relative py-24 bg-gradient-to-br from-[var(--third)]/20 via-white to-[var(--secondary)]/10 overflow-hidden ">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center relative z-10">
         {/* Heading */}
-        <h2 className="text-4xl lg:text-5xl font-extrabold text-[var(--primary)] mb-4 tracking-tight">
+        <h2 className="text-2xl lg:text-4xl font-extrabold text-[var(--primary)] mb-4 tracking-tight">
           How It Works
         </h2>
         <p className="text-lg text-[var(--secondary)] max-w-2xl mx-auto mb-16">

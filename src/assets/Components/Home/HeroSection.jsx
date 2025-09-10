@@ -26,28 +26,30 @@ const HeroSection = () => {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary)]/60 via-[var(--third)]/40 to-[var(--primary)]/60"></div>
+      {/* Lighter Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-[var(--third)]/10 to-[var(--primary)]/10"></div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center gap-12 py-16 lg:py-20">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12 py-16 lg:py-10">
         {/* Left Content */}
-        <div className="flex-1 flex flex-col gap-6 text-white z-10">
+        <div className="flex-1 flex flex-col gap-6 text-gray-800 z-10">
           <h1 className="text-4xl lg:text-5xl font-extrabold leading-tight">
-            Turn Your Old Devices Into Instant Cash
+            Sell The Latest As is Smartphones at <span className="text-[var(--primary)]">
+              ReCellence
+            </span>
           </h1>
-          <p className="text-lg text-white/90">
-            Sell your smartphone, tablet, or laptop quickly and securely. Get instant quotes and cash in just 24 hours.
+          <p className="text-lg text-gray-600">
+           Thinking of replacing your old phone? Discover how giving it a second life can be good for both the environment and your wallet.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
             <button
               onClick={() => navigate("/sell-phone")}
-              className="bg-[var(--primary)] text-white font-semibold px-6 py-3 rounded-xl shadow-xl hover:shadow-2xl transition transform hover:scale-105"
+              className="bg-[var(--primary)] text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition transform hover:scale-105"
             >
               Sell Now
             </button>
-            <button className="border-2 border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white hover:text-[var(--primary)] transition transform hover:scale-105">
+            <button className="border-2 border-[var(--primary)] text-[var(--primary)] font-semibold px-6 py-3 rounded-xl hover:bg-[var(--primary)] hover:text-white transition transform hover:scale-105">
               Learn More
             </button>
           </div>
@@ -57,24 +59,24 @@ const HeroSection = () => {
             {features.map((feature, idx) => (
               <div
                 key={idx}
-                className="flex-1 flex flex-col items-start gap-3 p-6 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg hover:shadow-2xl transition transform hover:scale-101 cursor-pointer"
+                className="flex-1 flex flex-col items-start gap-3 p-6 rounded-3xl bg-white shadow-md border border-gray-200 hover:shadow-lg transition transform hover:scale-105 cursor-pointer"
               >
                 <div className="p-4 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--third)] text-white shadow-md flex items-center justify-center">
                   {feature.icon}
                 </div>
-                <h3 className="text-white font-bold text-lg">{feature.title}</h3>
-                <p className="text-white/80 text-sm">{feature.text}</p>
+                <h3 className="text-gray-800 font-bold text-lg">{feature.title}</h3>
+                <p className="text-gray-600 text-sm">{feature.text}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Right Hero Image */}
-        <div className="flex-1 flex justify-center lg:justify-end z-10 animate-float">
+        {/* Centered Hero Image */}
+        <div className="flex-1 flex justify-center items-center z-10 animate-float">
           <img
             src={HeroImage}
             alt="Hero Devices"
-            className="w-full max-w-md lg:max-w-lg object-contain drop-shadow-2xl"
+            className="w-full max-w-md lg:max-w-lg object-contain drop-shadow-lg"
           />
         </div>
       </div>

@@ -12,33 +12,28 @@ const deviceParts = [
 const Step2Condition = ({ condition, setCondition, nextStep, prevStep }) => {
   const [activePart, setActivePart] = useState(deviceParts[0].key);
 
-  const detailsDone =
-    Object.keys(condition).length === deviceParts.length &&
-    Object.values(condition).every((val) => val !== null);
+  // Check only the parts we are testing
+  const detailsDone = deviceParts.every((part) => condition[part.key] !== null);
+
+  // Handles moving to next part or next step
+  const handleNextPart = () => {
+    const currentIndex = deviceParts.findIndex((part) => part.key === activePart);
+    if (currentIndex < deviceParts.length - 1) {
+      setActivePart(deviceParts[currentIndex + 1].key);
+    } else {
+      // All parts completed, go to next step
+      nextStep();
+    }
+  };
 
   const renderPart = () => {
     switch (activePart) {
       case "screen":
-        return (
-          <ScreenCondition
-            setCondition={setCondition}
-            onNext={() => setActivePart("battery")}
-          />
-        );
+        return <ScreenCondition setCondition={setCondition} onNext={handleNextPart} />;
       case "battery":
-        return (
-          <BatteryCondition
-            setCondition={setCondition}
-            onNext={() => setActivePart("buttons")}
-          />
-        );
+        return <BatteryCondition setCondition={setCondition} onNext={handleNextPart} />;
       case "buttons":
-        return (
-          <ButtonsCondition
-            setCondition={setCondition}
-            onNext={() => {}}
-          />
-        );
+        return <ButtonsCondition setCondition={setCondition} onNext={handleNextPart} />;
       default:
         return null;
     }
@@ -82,7 +77,7 @@ const Step2Condition = ({ condition, setCondition, nextStep, prevStep }) => {
 
         <button
           type="button"
-          onClick={nextStep}
+          onClick={handleNextPart}
           disabled={!detailsDone}
           className="bg-[var(--primary)] text-white px-6 py-2 rounded-xl hover:scale-105 transition transform disabled:opacity-50 text-sm"
         >

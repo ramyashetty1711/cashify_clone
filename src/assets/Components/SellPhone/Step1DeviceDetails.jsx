@@ -5,6 +5,7 @@ import AppleLogo from "../../PhoneImages/apple-logo.png";
 import SamsungLogo from "../../PhoneImages/samsung-logo.png";
 import OnePlusLogo from "../../PhoneImages/oneplus-logo.png";
 
+
 // Brand options with logos
 const brands = [
   { value: "Apple", label: "Apple", logo: AppleLogo },
@@ -41,42 +42,43 @@ const Step1DeviceDetails = ({
   setSelectedModel,
   storage,
   setStorage,
-  color,
-  setColor,
   storageOptions,
-  colors,
   nextStep,
 }) => {
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-2xl font-bold text-[var(--primary)] text-center" >1. Device Details</h2>
+    <div className="flex flex-col gap-8">
+      <h2 className="text-3xl font-extrabold text-center text-[var(--primary)]">
+        Step 1: Device Details
+      </h2>
 
       {/* Brand Selection with Logo */}
       <div>
-        <h3 className="font-semibold mb-2">Choose a Brand</h3>
-        <div className="flex gap-4 flex-wrap">
+        <h3 className="text-lg font-semibold mb-4 text-[var(--secondary)]">
+          Choose a Brand
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
           {brands.map((b) => (
             <div
               key={b.value}
-              className={`p-3 rounded-xl cursor-pointer transition-all duration-300 transform 
-                ${brand?.value === b.value
-                  ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg scale-105"
-                  : "border border-[var(--third)] hover:border-[var(--primary)] hover:shadow-md"
+              className={`p-6 rounded-2xl cursor-pointer transition-all duration-300 shadow-sm border 
+                ${
+                  brand?.value === b.value
+                    ? "border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg scale-105"
+                    : "border-gray-300 hover:border-[var(--primary)] hover:shadow-md"
                 }`}
               onClick={() => {
                 setBrand(b);
                 setSelectedModel(null);
                 setStorage(null);
-                setColor(null);
               }}
             >
               <img
                 src={b.logo}
                 alt={b.label}
-                className="w-20 h-20 object-contain mx-auto"
+                className="w-16 h-16 object-contain mx-auto"
               />
               <p
-                className={`text-center mt-2 font-medium ${
+                className={`text-center mt-3 font-medium ${
                   brand?.value === b.value
                     ? "text-[var(--primary)]"
                     : "text-[var(--secondary)]"
@@ -89,28 +91,31 @@ const Step1DeviceDetails = ({
         </div>
       </div>
 
-      {/* Model Images */}
+      {/* Model Selection */}
       {brand && (
         <div>
-          <h3 className="font-semibold mb-2">Choose your {brand.label} Model</h3>
-          <div className="flex gap-4 flex-wrap">
+          <h3 className="text-lg font-semibold mb-4 text-[var(--secondary)]">
+            Choose your {brand.label} Model
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
             {modelsByBrand[brand.value].map((m) => (
               <div
                 key={m.value}
-                className={`p-3 rounded-xl cursor-pointer transition-all duration-300 transform 
-                  ${selectedModel?.value === m.value
-                    ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg scale-105"
-                    : "border border-[var(--third)] hover:border-[var(--primary)] hover:shadow-md"
+                className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 shadow-sm border text-center
+                  ${
+                    selectedModel?.value === m.value
+                      ? "border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg scale-105"
+                      : "border-gray-300 hover:border-[var(--primary)] hover:shadow-md"
                   }`}
                 onClick={() => setSelectedModel(m)}
               >
                 <img
-                  src={modelImages[m.value]}
+                  src={modelImages[m.value] }
                   alt={m.label}
-                  className="w-32 h-32 object-contain"
+                  className="w-28 h-28 object-contain mx-auto"
                 />
                 <p
-                  className={`text-center mt-2 font-medium ${
+                  className={`mt-3 font-medium ${
                     selectedModel?.value === m.value
                       ? "text-[var(--primary)]"
                       : "text-[var(--secondary)]"
@@ -126,54 +131,37 @@ const Step1DeviceDetails = ({
 
       {/* Storage Options */}
       {selectedModel && (
-        <div className="mt-4">
-          <h3 className="font-semibold mb-2">Select Storage</h3>
-          <div className="flex gap-4">
+        <div>
+          <h3 className="text-lg font-semibold mb-4 text-[var(--secondary)]">
+            Select Storage
+          </h3>
+          <div className="flex gap-4 flex-wrap">
             {storageOptions.map((s) => (
-              <label key={s.value} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="storage"
-                  value={s.value}
-                  checked={storage?.value === s.value}
-                  onChange={() => setStorage(s)}
-                />
+              <button
+                key={s.value}
+                className={`px-5 py-2 rounded-full border transition-all duration-300 
+                  ${
+                    storage?.value === s.value
+                      ? "bg-[var(--primary)] text-white border-[var(--primary)]"
+                      : "border-gray-400 text-[var(--secondary)] hover:border-[var(--primary)]"
+                  }`}
+                onClick={() => setStorage(s)}
+              >
                 {s.label}
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Color Options */}
-      {selectedModel && (
-        <div className="mt-4">
-          <h3 className="font-semibold mb-2">Select Color</h3>
-          <div className="flex gap-4">
-            {colors.map((c) => (
-              <label key={c.value} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="color"
-                  value={c.value}
-                  checked={color?.value === c.value}
-                  onChange={() => setColor(c)}
-                />
-                {c.label}
-              </label>
+              </button>
             ))}
           </div>
         </div>
       )}
 
       {/* Next Button */}
-      <div className="flex justify-end mt-4">
+      <div className="flex justify-end sticky bottom-4">
         <button
-          className="bg-[var(--primary)] text-white px-6 py-3 rounded-xl hover:scale-105 transition transform"
+          className="bg-[var(--primary)] text-white px-8 py-3 rounded-xl shadow-md hover:scale-105 transition transform disabled:opacity-50"
           onClick={nextStep}
-          disabled={!brand || !selectedModel || !storage || !color}
+          disabled={!brand || !selectedModel || !storage}
         >
-          Next
+          Next →
         </button>
       </div>
     </div>

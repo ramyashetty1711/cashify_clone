@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import Slider from "react-slick";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-// Sample store data with pincodes
+// Sample store data
 const storeData = [
   { name: "Switch Kart - MG Road", address: "123 MG Road, Bengaluru", phone: "080-12345678", pincode: "560001" },
   { name: "Tech Hub - Koramangala", address: "45 Koramangala, Bengaluru", phone: "080-87654321", pincode: "560034" },
@@ -9,17 +11,50 @@ const storeData = [
   { name: "SmartBuy - Connaught Place", address: "5 CP, Delhi", phone: "011-12345678", pincode: "110001" },
 ];
 
+// Custom Arrow Components
+const NextArrow = ({ onClick }) => (
+  <div
+    onClick={onClick}
+    className="absolute top-1/2 -right-5 transform -translate-y-1/2 z-10 bg-[var(--primary)] text-white w-10 h-10 flex items-center justify-center rounded-full cursor-pointer shadow-lg hover:bg-[var(--third)] transition"
+  >
+    <FaArrowRight />
+  </div>
+);
+
+const PrevArrow = ({ onClick }) => (
+  <div
+    onClick={onClick}
+    className="absolute top-1/2 -left-5 transform -translate-y-1/2 z-10 bg-[var(--primary)] text-white w-10 h-10 flex items-center justify-center rounded-full cursor-pointer shadow-lg hover:bg-[var(--third)] transition"
+  >
+    <FaArrowLeft />
+  </div>
+);
+
 const CityStores = () => {
   const [pincode, setPincode] = useState("");
 
-  // Filter stores by entered pincode
   const filteredStores = storeData.filter((store) =>
     pincode ? store.pincode.includes(pincode) : true
   );
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 1 } },
+    ],
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      <h2 className="text-3xl font-bold text-[var(--primary)] mb-6 text-center">
+    <div className="max-w-7xl mx-auto px-6 py-12 relative">
+      <h2 className="text-2xl lg:text-4xl text-center font-extrabold text-[var(--primary)] mb-4 tracking-tight">
         Find Stores by Pincode
       </h2>
 
@@ -36,30 +71,27 @@ const CityStores = () => {
 
       {/* Store List */}
       {filteredStores.length === 0 && (
-        <p className="text-center text-gray-400">
-          No stores found for the entered pincode.
-        </p>
+        <p className="text-center text-gray-400">No stores found for the entered pincode.</p>
       )}
 
       {filteredStores.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Slider {...settings}>
           {filteredStores.map((store, idx) => (
-            <div
-              key={idx}
-              className="bg-white dark:bg-gray-50 rounded-xl shadow-lg p-6 hover:shadow-2xl transition transform hover:scale-101 border border-gray-200"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-[var(--primary)]">{store.name}</h3>
-                <span className="bg-[var(--primary)] text-white px-2 py-1 rounded-full text-sm font-medium">
-                  Store
-                </span>
+            <div key={idx} className="px-2">
+              <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition transform  border border-gray-200 flex flex-col gap-3">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-lg font-semibold text-[var(--primary)]">{store.name}</h3>
+                  <span className="bg-[var(--primary)] text-white px-3 py-1 rounded-full text-xs font-medium">
+                    Store
+                  </span>
+                </div>
+                <p className="text-gray-700">{store.address}</p>
+                <p className="text-gray-700">📞 {store.phone}</p>
+                <p className="text-gray-700">📍 Pincode: {store.pincode}</p>
               </div>
-              <p className="text-gray-700 mb-1">{store.address}</p>
-              <p className="text-gray-700 mb-1">📞 {store.phone}</p>
-              <p className="text-gray-700">📍 Pincode: {store.pincode}</p>
             </div>
           ))}
-        </div>
+        </Slider>
       )}
     </div>
   );

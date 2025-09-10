@@ -27,60 +27,45 @@ const FAQAccordion = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-16 px-4">
-      <h2 className="text-4xl font-extrabold text-center mb-12 text-gray-900">
+    <div className="max-w-4xl mx-auto my-16 px-4">
+      <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
         Frequently Asked Questions
       </h2>
 
-      <div className="space-y-4">
+      <div className="space-y-4 "   >
         {faqData.map((item, index) => (
-          <motion.div
+          <div
             key={index}
-            layout
-            className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
-            whileHover={{ y: -2, boxShadow: "0px 10px 25px rgba(0,0,0,0.08)" }}
-            transition={{ duration: 0.3 }}
+            className="bg-white p-2 rounded-lg shadow border border-gray-200 overflow-hidden"
           >
             {/* Question */}
             <button
               onClick={() => toggleIndex(index)}
-              className="w-full flex justify-between items-center px-6 py-5 text-left text-lg font-semibold text-gray-800 hover:bg-gray-50 transition-colors duration-300"
+              className="w-full flex justify-between items-center px-6 py-4 text-left text-lg font-medium text-gray-800 hover:bg-gray-50 transition-colors"
             >
               <span>{item.question}</span>
 
-              {/* Plus/Minus Toggle */}
-              <motion.div className="relative w-6 h-6 flex items-center justify-center">
-                {/* Horizontal bar (always visible) */}
-                <motion.span
-                  className="absolute w-6 h-0.5 bg-blue-500 rounded-full"
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                ></motion.span>
-
-                {/* Vertical bar (disappears on open) */}
-                <motion.span
-                  className="absolute w-0.5 h-6 bg-blue-500 rounded-full origin-center"
-                  animate={{ scaleY: activeIndex === index ? 0 : 1 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                ></motion.span>
-              </motion.div>
+              {/* Plus/Minus */}
+              <span className={`transition-transform  duration-300 ${activeIndex === index ? "rotate-45" : "-rotate-135"} inline-block w-3 h-3 border-b-2 border-r-2 border-blue-600`} />
             </button>
 
             {/* Answer */}
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {activeIndex === index && (
                 <motion.div
                   key="content"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
-                  className="px-6 py-4 text-gray-700 text-base bg-gray-50 border-t border-gray-100"
+                  initial={{ opacity: 0, scaleY: 0 }}
+                  animate={{ opacity: 1, scaleY: 1 }}
+                  exit={{ opacity: 0, scaleY: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="px-6 py-4 text-gray-700 text-base bg-gray-50 origin-top"
+                  style={{ transformOrigin: "top" }}
                 >
                   {item.answer}
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

@@ -8,7 +8,7 @@ import CTASection from "./CTASection";
 
 function Home() {
   return (
-    <div className="text-black min-h-[100vh]">
+    <div className="text-black min-h-[100vh] overflow-x-hidden">
       {/* Hero / First Impression */}
       <HeroSection />
 

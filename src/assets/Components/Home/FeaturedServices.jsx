@@ -27,7 +27,7 @@ const FeaturedServices = () => {
   return (
     <section className="relative py-24 bg-gradient-to-br from-[var(--third)]/20 via-white to-[var(--third)]/10 ">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
-        <h2 className="text-4xl lg:text-5xl font-extrabold text-[var(--primary)] mb-6">
+        <h2 className="text-2xl lg:text-4xl font-extrabold text-[var(--primary)] mb-6">
           Why Sell Your Phone With Us?
         </h2>
         <p className="text-lg text-[var(--secondary)] max-w-2xl mx-auto mb-16">

@@ -4,18 +4,13 @@ import Step3Condition from "./Step2Condition";
 import Step4Accessories from "./Step3Accessories";
 import Step5Contact from "./Step4Contact";
 import Step2LoginPrice from "./Step2LoginPrice";
+import DeviceConditionForm from "./DeviceConditionForm";
 
-// Storage, color, and condition data
+// Storage options
 const storageOptions = [
   { value: "64GB", label: "64GB", price: 1000 },
   { value: "128GB", label: "128GB", price: 1500 },
   { value: "256GB", label: "256GB", price: 2000 },
-];
-
-const colors = [
-  { value: "Black", label: "Black" },
-  { value: "White", label: "White" },
-  { value: "Blue", label: "Blue" },
 ];
 
 const SellPhone = () => {
@@ -23,9 +18,7 @@ const SellPhone = () => {
   const [brand, setBrand] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [storage, setStorage] = useState(null);
-  const [color, setColor] = useState(null);
 
-  // ✅ Initialize condition as an object
   const [condition, setCondition] = useState({
     screen: null,
     battery: null,
@@ -37,16 +30,21 @@ const SellPhone = () => {
   const [contact, setContact] = useState({ name: "", phone: "", email: "" });
   const [estimatedPrice, setEstimatedPrice] = useState(0);
 
-  // ✅ Price calculation logic
+  // Scroll to top whenever step changes
   useEffect(() => {
-    if (step >= 3 && storage) { // condition starts from step 3 now
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
+
+  // Price calculation
+  useEffect(() => {
+    if (step >= 3 && storage) {
       const yesCount = Object.values(condition).filter((c) => c === "yes").length;
 
       let discount = 0;
-      if (yesCount === 4) discount = 0; // Excellent
-      else if (yesCount >= 3) discount = -100; // Good
-      else if (yesCount >= 2) discount = -300; // Average
-      else discount = -500; // Poor
+      if (yesCount === 4) discount = 0;
+      else if (yesCount >= 3) discount = -100;
+      else if (yesCount >= 2) discount = -300;
+      else discount = -500;
 
       let price = storage.price + discount;
 
@@ -62,22 +60,6 @@ const SellPhone = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-12 text-[var(--secondary)]">
-      <h1 className="text-3xl lg:text-4xl font-extrabold text-center mb-8 text-[var(--primary)]">
-        Sell Your Phone in 5 Easy Steps
-      </h1>
-
-      {/* Step Indicators */}
-      <div className="flex justify-center gap-4 mb-12">
-        {[1, 2, 3, 4, 5].map((s) => (
-          <div
-            key={s}
-            className={`w-10 h-10 flex items-center justify-center rounded-full font-bold text-white transition-all
-              ${step === s ? "bg-[var(--primary)] scale-110" : "bg-[var(--third)]/60"}`}
-          >
-            {s}
-          </div>
-        ))}
-      </div>
 
       {/* Step Components */}
       {step === 1 && (
@@ -88,10 +70,7 @@ const SellPhone = () => {
           setSelectedModel={setSelectedModel}
           storage={storage}
           setStorage={setStorage}
-          color={color}
-          setColor={setColor}
           storageOptions={storageOptions}
-          colors={colors}
           nextStep={nextStep}
         />
       )}
@@ -103,7 +82,19 @@ const SellPhone = () => {
         />
       )}
 
-      {step === 3 && (
+     {step === 3 && (
+  <DeviceConditionForm
+    onNext={(answers) => {
+      // optionally save answers to condition or state here
+      setCondition((prev) => ({ ...prev, ...answers }));
+      nextStep(); // move to next step
+    }}
+    onBack={prevStep}
+  />
+)}
+
+
+      {step === 4 && (
         <Step3Condition
           condition={condition}
           setCondition={setCondition}
@@ -113,7 +104,7 @@ const SellPhone = () => {
         />
       )}
 
-      {step === 4 && (
+      {step === 5 && (
         <Step4Accessories
           accessories={accessories}
           setAccessories={setAccessories}
@@ -122,14 +113,7 @@ const SellPhone = () => {
         />
       )}
 
-      {step === 5 && (
-        <Step5Contact
-          contact={contact}
-          setContact={setContact}
-          estimatedPrice={estimatedPrice}
-          prevStep={prevStep}
-        />
-      )}
+      
     </div>
   );
 };
